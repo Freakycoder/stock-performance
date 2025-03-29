@@ -23,9 +23,7 @@ export const Dashboard: React.FC = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [notificationsCount, setNotificationsCount] = useState(3);
-    const [layoutType, setLayoutType] = useState<'standard' | 'masonry' | 'dashboard'>('standard');
-    
-    const mainContainerWidth = sidebarCollapsed ? 'pl-0 md:pl-20' : 'pl-0 md:pl-64';
+    const [layoutType, setLayoutType] = useState<'minimal' | 'compact' | 'expanded'>('minimal');
     
     const filteredStocks = portfolioStocks.filter(stock => 
         stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -38,39 +36,57 @@ export const Dashboard: React.FC = () => {
     };
 
     const cycleLayout = () => {
-        if (layoutType === 'standard') setLayoutType('masonry');
-        else if (layoutType === 'masonry') setLayoutType('dashboard');
-        else setLayoutType('standard');
+        if (layoutType === 'minimal') setLayoutType('compact');
+        else if (layoutType === 'compact') setLayoutType('expanded');
+        else setLayoutType('minimal');
     };
 
-    const fadeInUpVariants = {
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: (i: number) => ({
+        visible: {
             opacity: 1,
             y: 0,
             transition: {
-                delay: i * 0.05,
-                duration: 0.4,
-                ease: [0.25, 0.1, 0.25, 1.0]
+                type: "spring",
+                stiffness: 400,
+                damping: 40
             }
-        })
+        }
     };
 
     return (
-        <div className="bg-background dark:bg-background min-h-screen text-foreground dark:text-foreground font-sans">
-            <div className="block md:hidden fixed top-4 left-4 z-50">
-                <button
-                    onClick={toggleSidebar}
-                    className="p-3 bg-card dark:bg-card rounded-full shadow-md text-foreground"
-                >
-                    <Menu size={20} />
-                </button>
-            </div>
+        <div className="bg-zinc-50 dark:bg-zinc-900 min-h-screen text-zinc-800 dark:text-zinc-200 font-sans">
+            {/* Mobile menu toggle */}
+            <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={toggleSidebar}
+                className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-zinc-800 rounded-full shadow-md text-zinc-800 dark:text-zinc-200"
+            >
+                <Menu size={20} />
+            </motion.button>
             
             <Sidebar />
 
-            <main className={`transition-all duration-300 ${mainContainerWidth}`}>
-                <header className="sticky top-0 z-30 bg-background/60 dark:bg-background/60 backdrop-blur-xl border-b border-border/40 h-16 px-4 md:px-8 flex items-center justify-between">
+            <main className={`transition-all duration-300 ${sidebarCollapsed ? 'ml-0 md:ml-16' : 'ml-0 md:ml-60'}`}>
+                {/* Header Bar */}
+                <motion.header 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="sticky top-0 z-30 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 h-16 px-4 md:px-6 flex items-center justify-between"
+                >
                     <div className="flex-1 max-w-md">
                         <div className="relative w-full">
                             <input
@@ -78,18 +94,18 @@ export const Dashboard: React.FC = () => {
                                 placeholder="Search stocks..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 bg-card/50 dark:bg-card/50 border-0 rounded-full text-sm focus:ring-1 focus:ring-primary/30 dark:focus:ring-primary/30 shadow-sm transition-all"
+                                className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-700 border-0 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-500 shadow-sm transition-all"
                             />
-                            <Search size={16} className="absolute left-3 top-2.5 text-muted-foreground" />
+                            <Search size={16} className="absolute left-3 top-2.5 text-zinc-400 dark:text-zinc-500" />
                             
                             {searchTerm.length > 0 && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="absolute top-full left-0 w-full mt-2 bg-card dark:bg-card rounded-xl shadow-lg border border-border/40 z-50 max-h-60 overflow-y-auto"
+                                    className="absolute top-full left-0 w-full mt-2 bg-white dark:bg-zinc-800 rounded-lg shadow-lg border border-zinc-200 dark:border-zinc-700 z-50 max-h-60 overflow-y-auto"
                                 >
                                     {filteredStocks.length === 0 ? (
-                                        <div className="p-4 text-center text-muted-foreground">No stocks found</div>
+                                        <div className="p-4 text-center text-zinc-400 dark:text-zinc-500">No stocks found</div>
                                     ) : (
                                         filteredStocks.map(stock => (
                                             <motion.div 
@@ -97,13 +113,13 @@ export const Dashboard: React.FC = () => {
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
                                                 whileHover={{ backgroundColor: 'rgba(0,0,0,0.03)' }}
-                                                className="p-3 cursor-pointer flex items-center border-b border-border/40 last:border-0"
+                                                className="p-3 cursor-pointer flex items-center border-b border-zinc-200 dark:border-zinc-700 last:border-0"
                                                 onClick={() => handleStockSelect(stock)}
                                             >
                                                 <img src={stock.logoUrl} alt={stock.name} className="w-8 h-8 mr-3 rounded-full" />
                                                 <div>
                                                     <p className="font-medium">{stock.symbol}</p>
-                                                    <p className="text-xs text-muted-foreground">{stock.name}</p>
+                                                    <p className="text-xs text-zinc-400 dark:text-zinc-500">{stock.name}</p>
                                                 </div>
                                             </motion.div>
                                         ))
@@ -118,9 +134,9 @@ export const Dashboard: React.FC = () => {
                             whileTap={{ scale: 0.95 }}
                             onClick={cycleLayout}
                             className={`p-2 rounded-full relative hover:shadow-md transition-all ${
-                                layoutType !== 'standard' 
-                                    ? 'bg-primary/20 text-primary' 
-                                    : 'bg-card dark:bg-card text-foreground'
+                                layoutType !== 'minimal' 
+                                    ? 'bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200' 
+                                    : 'bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200'
                             }`}
                             title={`Current layout: ${layoutType}. Click to change.`}
                         >
@@ -129,221 +145,169 @@ export const Dashboard: React.FC = () => {
                         
                         <motion.button 
                             whileTap={{ scale: 0.95 }}
-                            className="p-2 bg-card dark:bg-card rounded-full relative hover:shadow-md transition-all"
+                            className="p-2 bg-white dark:bg-zinc-800 rounded-full relative hover:shadow-md transition-all"
                         >
-                            <Bell size={16} className="text-foreground dark:text-foreground" />
+                            <Bell size={16} className="text-zinc-800 dark:text-zinc-200" />
                             {notificationsCount > 0 && (
-                                <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-primary text-primary-foreground rounded-full text-[10px] flex items-center justify-center font-medium">
+                                <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-rose-500 text-white rounded-full text-[10px] flex items-center justify-center font-medium">
                                     {notificationsCount}
                                 </span>
                             )}
                         </motion.button>
-                        <div className="h-6 border-l border-border/40"></div>
+                        <div className="h-6 border-l border-zinc-200 dark:border-zinc-700"></div>
                         <div className="flex items-center">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/10 flex items-center justify-center mr-2 text-primary">
+                            <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center mr-2 text-zinc-800 dark:text-zinc-200">
                                 <User size={14} />
                             </div>
                             <span className="text-sm font-medium hidden md:inline-block">John Doe</span>
                         </div>
                     </div>
-                </header>
+                </motion.header>
 
+                {/* Dashboard Content */}
                 <div className="p-4 md:p-6">
-                    {/* Header section common to all layouts */}
+                    {/* Header section */}
                     <motion.div 
-                        custom={0}
                         initial="hidden"
                         animate="visible"
-                        variants={fadeInUpVariants}
-                        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+                        variants={containerVariants}
                     >
-                        <h1 className="text-2xl font-semibold">Dashboard</h1>
-                        <motion.button 
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="flex items-center gap-2 px-4 py-2 bg-primary/90 hover:bg-primary text-primary-foreground rounded-full text-sm font-medium transition-all shadow-sm mt-3 md:mt-0"
+                        <motion.div 
+                            variants={itemVariants}
+                            className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
                         >
-                            <Plus size={16} />
-                            <span>Add Stock</span>
-                        </motion.button>
-                    </motion.div>
-
-                    {/* Portfolio Summary common to all layouts */}
-                    <motion.div
-                        custom={1}
-                        initial="hidden"
-                        animate="visible"
-                        variants={fadeInUpVariants}
-                        className="mb-6"
-                    >
-                        <PortfolioSummary />
-                    </motion.div>
-
-                    {/* Dashboard Style Layout (CSS Grid with areas) */}
-                    {layoutType === 'dashboard' && (
-                        <div className="grid grid-cols-12 auto-rows-auto gap-4 md:gap-6" style={{
-                            gridTemplateAreas: `
-                                "chart chart chart chart chart chart chart chart overview overview overview overview"
-                                "watchlist watchlist watchlist watchlist watchlist watchlist watchlist transactions transactions transactions transactions transactions"
-                            `,
-                        }}>
-                            <motion.div 
-                                custom={2}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 md:col-span-8 min-h-[400px]"
-                                style={{ gridArea: 'chart' }}
+                            <h1 className="text-2xl font-semibold">Dashboard</h1>
+                            <motion.button 
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="flex items-center gap-2 px-4 py-2 bg-zinc-800 dark:bg-zinc-100 hover:bg-zinc-900 dark:hover:bg-white text-white dark:text-zinc-900 rounded-lg text-sm font-medium transition-all shadow-sm mt-3 md:mt-0"
                             >
-                                <StockChart
-                                    stock={selectedStock}
-                                    historicalData={stocksHistoricalData[selectedStock.id]}
-                                />
-                            </motion.div>
+                                <Plus size={16} />
+                                <span>Add Stock</span>
+                            </motion.button>
+                        </motion.div>
 
-                            <motion.div
-                                custom={3}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 md:col-span-4 min-h-[400px]"
-                                style={{ gridArea: 'overview' }}
-                            >
-                                <MarketOverview />
-                            </motion.div>
+                        {/* Portfolio Summary */}
+                        <motion.div variants={itemVariants} className="mb-6">
+                            <PortfolioSummary />
+                        </motion.div>
 
-                            <motion.div
-                                custom={4}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 md:col-span-7 min-h-[350px]"
-                                style={{ gridArea: 'watchlist' }}
-                            >
-                                <WatchList />
-                            </motion.div>
+                        {/* Grid layouts */}
+                        {layoutType === 'minimal' && (
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+                                <motion.div 
+                                    variants={itemVariants}
+                                    className="md:col-span-8 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[400px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <StockChart
+                                        stock={selectedStock}
+                                        historicalData={stocksHistoricalData[selectedStock.id]}
+                                    />
+                                </motion.div>
 
-                            <motion.div
-                                custom={5}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 md:col-span-5 min-h-[350px]"
-                                style={{ gridArea: 'transactions' }}
-                            >
-                                <TransactionHistory />
-                            </motion.div>
-                        </div>
-                    )}
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="md:col-span-4 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[400px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <MarketOverview />
+                                </motion.div>
 
-                    {/* Masonry Layout */}
-                    {layoutType === 'masonry' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                            <motion.div 
-                                custom={2}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="md:col-span-2 min-h-[400px]"
-                            >
-                                <StockChart
-                                    stock={selectedStock}
-                                    historicalData={stocksHistoricalData[selectedStock.id]}
-                                />
-                            </motion.div>
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="md:col-span-6 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[350px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <WatchList />
+                                </motion.div>
 
-                            <motion.div
-                                custom={3}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="min-h-[400px] row-span-2"
-                            >
-                                <MarketOverview />
-                            </motion.div>
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="md:col-span-6 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[350px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <TransactionHistory />
+                                </motion.div>
+                            </div>
+                        )}
 
-                            <motion.div
-                                custom={4}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="min-h-[350px]"
-                            >
-                                <WatchList />
-                            </motion.div>
+                        {layoutType === 'compact' && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <motion.div 
+                                    variants={itemVariants}
+                                    className="col-span-1 lg:col-span-2 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[400px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <StockChart
+                                        stock={selectedStock}
+                                        historicalData={stocksHistoricalData[selectedStock.id]}
+                                    />
+                                </motion.div>
 
-                            <motion.div
-                                custom={5}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="min-h-[350px]"
-                            >
-                                <TransactionHistory />
-                            </motion.div>
-                        </div>
-                    )}
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="col-span-1 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[400px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <MarketOverview />
+                                </motion.div>
 
-                    {/* Standard Layout */}
-                    {layoutType === 'standard' && (
-                        <div className="grid grid-cols-12 gap-4 md:gap-6">
-                            <motion.div 
-                                custom={2}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 lg:col-span-8 min-h-[400px]"
-                            >
-                                <StockChart
-                                    stock={selectedStock}
-                                    historicalData={stocksHistoricalData[selectedStock.id]}
-                                />
-                            </motion.div>
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="col-span-1 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[350px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <WatchList />
+                                </motion.div>
 
-                            <motion.div
-                                custom={3}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 lg:col-span-4 min-h-[400px]"
-                            >
-                                <MarketOverview />
-                            </motion.div>
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="col-span-1 lg:col-span-2 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[350px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <TransactionHistory />
+                                </motion.div>
+                            </div>
+                        )}
 
-                            <motion.div
-                                custom={4}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 lg:col-span-7 min-h-[350px]"
-                            >
-                                <WatchList />
-                            </motion.div>
+                        {layoutType === 'expanded' && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <motion.div 
+                                    variants={itemVariants}
+                                    className="md:col-span-3 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[400px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <StockChart
+                                        stock={selectedStock}
+                                        historicalData={stocksHistoricalData[selectedStock.id]}
+                                    />
+                                </motion.div>
 
-                            <motion.div
-                                custom={5}
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeInUpVariants}
-                                className="col-span-12 lg:col-span-5 min-h-[350px]"
-                            >
-                                <TransactionHistory />
-                            </motion.div>
-                        </div>
-                    )}
-                    
-                    {/* Footer section */}
-                    <motion.div 
-                        custom={6}
-                        initial="hidden"
-                        animate="visible"
-                        variants={fadeInUpVariants}
-                        className="text-center mt-6"
-                    >
-                        <a href="https://finviz.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary text-sm hover:underline transition-all">
-                            <span>Visit Finviz for more financial data</span>
-                            <ArrowUpRight size={12} />
-                        </a>
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="md:col-span-1 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[350px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <MarketOverview />
+                                </motion.div>
+
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="md:col-span-1 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[350px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <WatchList />
+                                </motion.div>
+
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="md:col-span-1 bg-white dark:bg-zinc-800 rounded-lg shadow-sm p-4 min-h-[350px] border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <TransactionHistory />
+                                </motion.div>
+                            </div>
+                        )}
+                        
+                        {/* Footer */}
+                        <motion.div 
+                            variants={itemVariants}
+                            className="text-center mt-6 text-zinc-500 dark:text-zinc-400"
+                        >
+                            <a href="https://finviz.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 text-sm hover:underline transition-all">
+                                <span>Visit Finviz for more financial data</span>
+                                <ArrowUpRight size={12} />
+                            </a>
+                        </motion.div>
                     </motion.div>
                 </div>
             </main>
