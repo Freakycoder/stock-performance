@@ -5,6 +5,9 @@ StockMate is a comprehensive web application for stock portfolio management, mar
 
 Built using Next.js and TypeScript on the frontend with a sleek, animated interface, StockMate combines powerful financial tools with an engaging user experience. The glass-effect UI components and dynamic animated backgrounds create a visually appealing environment without sacrificing functionality or performance.
 
+## Live Link
+**stockmatee.vercel.app**
+
 ## Features
 
 ### Portfolio Management
