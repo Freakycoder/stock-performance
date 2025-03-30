@@ -90,15 +90,7 @@ import {
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="fixed inset-y-0 left-0 z-40 w-72 border-r border-gray-200 bg-white p-6 shadow-lg md:hidden"
             >
-              <div className="flex items-center gap-3 mb-8">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-                  <Sparkles className="h-5 w-5" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Finance<span className="ml-1 text-gray-400">Pro</span></h1>
-                  <p className="text-xs font-medium text-gray-500">Finance Dashboard</p>
-                </div>
-              </div>
+              
               
               <nav className="space-y-1 mt-1">
                 {navItems.map((item) => (
@@ -196,15 +188,6 @@ import {
     // Desktop sidebar - always visible
     const desktopSidebar = (
       <div className="hidden h-screen w-72 flex-col border-r border-gray-200 bg-white px-4 py-6 lg:flex">
-        <div className="flex items-center gap-3 px-2 mb-8">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-            <Sparkles className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Finance<span className="ml-1 text-gray-400">Pro</span></h1>
-            <p className="text-xs font-medium text-gray-500">Finance Dashboard</p>
-          </div>
-        </div>
         
         <div className="mb-6 px-3">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Main Menu</p>

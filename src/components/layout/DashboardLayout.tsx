@@ -1,7 +1,7 @@
 // src/components/layout/DashboardLayout.tsx
 import { ReactNode, useState, useEffect } from "react";
-import { Navbar } from "./Navbar";
-import { Sidebar } from "./Sidebar";
+import { Header } from "../dashboard/Header";
+import { SideNav } from "../dashboard/SideNav";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface DashboardLayoutProps {
@@ -21,10 +21,10 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
-      <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} title={title} />
+    <div className="flex h-screen flex-col bg-gray-50">
+      <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} title={title} />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <SideNav isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="flex-1 overflow-y-auto p-6 lg:px-8">
           <AnimatePresence mode="wait">
             {isLoading ? (
@@ -46,7 +46,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="mx-auto max-w-7xl pb-12"
+                className="mx-auto max-w-[1600px] pb-12"
               >
                 {children}
               </motion.div>
@@ -54,24 +54,6 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
           </AnimatePresence>
         </main>
       </div>
-      
-      {/* Quick Actions Floating Button */}
-      <motion.div 
-        className="fixed bottom-6 right-6 z-10"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1, type: "spring" }}
-      >
-        <button 
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg hover:shadow-xl transition-shadow duration-300"
-          onClick={() => {}}
-          aria-label="Quick actions"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </button>
-      </motion.div>
     </div>
   );
 }

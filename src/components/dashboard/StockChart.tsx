@@ -34,6 +34,25 @@ interface StockChartProps {
   height?: number;
 }
 
+// Define better types for chart events
+interface ChartDataPoint {
+  x: number;
+  y: number | number[];
+}
+
+interface ChartSeries {
+  data: ChartDataPoint[];
+}
+
+interface ChartConfig {
+  dataPointIndex: number;
+  seriesIndex?: number;
+  series?: ChartSeries[];
+  globals?: {
+    seriesX?: number[][];
+  };
+}
+
 export function StockChart({ 
   data, 
   symbol,
@@ -109,7 +128,6 @@ export function StockChart({
   
   // Determine chart color based on change direction
   const chartColor = changePercent >= 0 ? (color || "#22c55e") : "#ef4444";
-  const chartGradientColor = changePercent >= 0 ? ["rgba(34, 197, 94, 0.3)", "rgba(255, 255, 255, 0)"] : ["rgba(239, 68, 68, 0.3)", "rgba(255, 255, 255, 0)"];
   
   // Format market activity info
   const marketOpen = new Date();
@@ -192,12 +210,18 @@ export function StockChart({
       background: 'transparent',
       fontFamily: 'inherit',
       events: {
-        mouseMove: function(event: any, chartContext: any, config: any) {
-          if (config.dataPointIndex > -1) {
-            const value = config.series[0].data[config.dataPointIndex].y;
-            const timestamp = config.series[0].data[config.dataPointIndex].x;
-            setHoveredValue(typeof value === 'number' ? value : value[3]);
-            setHoveredDate(formatDatetime(timestamp));
+        mouseMove: function(event: any, chartContext: any, config: ChartConfig) {
+          // Added proper safety checks to prevent TypeScript errors
+          if (config.dataPointIndex > -1 && config.series && 
+              config.series.length > 0 && config.series[0].data && 
+              config.dataPointIndex < config.series[0].data.length) {
+            const dataPoint = config.series[0].data[config.dataPointIndex];
+            if (dataPoint) {
+              const value = dataPoint.y;
+              const timestamp = dataPoint.x;
+              setHoveredValue(typeof value === 'number' ? value : value[3]);
+              setHoveredDate(formatDatetime(timestamp));
+            }
           }
         },
         mouseLeave: function() {
@@ -318,9 +342,27 @@ export function StockChart({
       marker: {
         show: false,
       },
+      fixed: {
+        enabled: true,
+        position: 'topRight',
+        offsetX: -10,
+        offsetY: 10,
+      },
       custom: ({ series, seriesIndex, dataPointIndex, w }: any) => {
+        // Added safety checks here as well
+        if (!series || seriesIndex === undefined || !series[seriesIndex] || 
+            dataPointIndex === undefined || !w || !w.globals || !w.globals.seriesX ||
+            !w.globals.seriesX[seriesIndex]) {
+          return "";
+        }
+        
         const value = series[seriesIndex][dataPointIndex];
         const timestamp = w.globals.seriesX[seriesIndex][dataPointIndex];
+        
+        if (value === undefined || timestamp === undefined) {
+          return "";
+        }
+        
         const date = new Date(timestamp);
         const formattedDate = date.toLocaleDateString('en-US', { 
           month: 'short', 
@@ -356,6 +398,14 @@ export function StockChart({
       ...chartOptions.chart,
       type: 'bar',
       height: 80,
+      events: {
+        mouseMove: function(event: any, chartContext: any, config: ChartConfig) {
+          // We don't need hover effects on the volume chart, so we can simplify this
+        },
+        mouseLeave: function() {
+          // No hover effects to clear for volume chart
+        }
+      }
     },
     tooltip: {
       ...chartOptions.tooltip,
@@ -406,21 +456,19 @@ export function StockChart({
   );
 
   return (
-    <Card className="overflow-hidden border-gray-200 shadow-sm bg-white">
-      <CardHeader className="border-b border-gray-200 bg-gray-50 p-6">
-        <div className="flex items-center justify-between">
+    <Card className="flex flex-col overflow-hidden border-gray-200 shadow-sm bg-white">
+      <CardHeader className="flex-shrink-0 border-b border-gray-200 bg-gray-50 p-6">
+        <div className="flex flex-wrap gap-4 justify-between">
           <div className="flex items-center gap-4">
             <div 
-              className="h-12 w-12 rounded-xl flex items-center justify-center shadow-sm"
+              className="h-10 w-12 rounded-xl flex items-center justify-center shadow-sm"
               style={{ backgroundColor: `${color}15` }}
             >
-              <span className="text-base font-bold" style={{ color }}>
-                {symbol.slice(0, 2)}
-              </span>
+              <img className="rounded-lg" src = {`${symbol}`}></img>
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <CardTitle className="text-xl font-bold text-gray-800">{name}</CardTitle>
+                <CardTitle className="text-xl font-bold text-gray-800 truncate max-w-[240px]">{name}</CardTitle>
                 <span className="rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-500">{symbol}</span>
                 <a href="#" className="text-gray-400 hover:text-gray-600 transition-colors">
                   <ExternalLink className="h-4 w-4" />
@@ -457,10 +505,10 @@ export function StockChart({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-6">
-        <div className="relative">
+      <CardContent className="flex-1 overflow-hidden flex flex-col p-6">
+        <div className="relative flex-1">
           {hoveredValue && hoveredDate && (
-            <div className="absolute top-4 left-4 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm">
+            <div className="absolute top-4 left-4 z-10 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm">
               <div className="text-sm font-medium text-gray-800">{formatCurrency(hoveredValue)}</div>
               <div className="text-xs text-gray-500">{hoveredDate}</div>
             </div>
@@ -470,6 +518,7 @@ export function StockChart({
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
             key={timeRange} // Re-animate when time range changes
+            className="h-full min-h-[320px]"
           >
             <ReactApexChart
               options={chartOptions as any}
@@ -478,7 +527,8 @@ export function StockChart({
                 data: seriesData
               }]}
               type={type}
-              height={height}
+              height="100%"
+              width="100%"
             />
           </motion.div>
         </div>
@@ -488,7 +538,7 @@ export function StockChart({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-2"
+            className="mt-2 h-[80px]"
           >
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-xs font-medium text-gray-500">Volume</h4>
@@ -508,7 +558,7 @@ export function StockChart({
           </motion.div>
         )}
         
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="mt-6 grid grid-cols-4 gap-4">
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="text-xs font-medium text-gray-500">Open</p>
             <p className="mt-1 text-sm font-semibold text-gray-800">{filteredData.length > 0 ? formatCurrency(filteredData[filteredData.length - 1].open) : '-'}</p>
@@ -523,7 +573,7 @@ export function StockChart({
           </div>
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="text-xs font-medium text-gray-500">Volume</p>
-            <p className="mt-1 text-sm font-semibold text-gray-800">{filteredData.length > 0 ? new Intl.NumberFormat().format(filteredData[filteredData.length - 1].volume) : '-'}</p>
+            <p className="mt-1 text-sm font-semibold text-gray-800 truncate">{filteredData.length > 0 ? new Intl.NumberFormat().format(filteredData[filteredData.length - 1].volume) : '-'}</p>
           </div>
         </div>
       </CardContent>

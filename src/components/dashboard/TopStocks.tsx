@@ -49,19 +49,17 @@ export function TopStocks({ limit = 3 }: TopStocksProps) {
           className="relative overflow-hidden rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 bg-white"
         >
           <div className="p-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 min-w-0">
               <div 
                 className="flex h-12 w-12 items-center justify-center rounded-xl shrink-0 shadow-sm" 
                 style={{ backgroundColor: `${stock.color}15` }}
               >
-                <span className="text-base font-bold" style={{ color: stock.color }}>
-                  {stock.symbol.slice(0, 2)}
-                </span>
+               <img className="rounded-lg" src={`${stock.logo}`}></img>
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="font-medium text-gray-800 line-clamp-1">{stock.name}</p>
-                  <span className="text-xs font-medium px-2 py-0.5 rounded bg-gray-100 text-gray-500">{stock.symbol}</span>
+                  <p className="font-medium text-gray-800 truncate max-w-[150px]">{stock.name}</p>
+                  <span className="text-xs font-medium px-2 py-0.5 rounded bg-gray-100 text-gray-500 shrink-0">{stock.symbol}</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="font-semibold text-gray-800">{formatCurrency(stock.price)}</span>
@@ -80,23 +78,8 @@ export function TopStocks({ limit = 3 }: TopStocksProps) {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden md:block h-16 w-24">
-                <AreaChart
-                  data={formatStockChart(stock.historicalData)}
-                  index="date"
-                  categories={["Price"]}
-                  colors={[stock.changePercent >= 0 ? "emerald" : "rose"]}
-                  showLegend={false}
-                  showXAxis={false}
-                  showYAxis={false}
-                  showGridLines={false}
-                  showTooltip={false}
-                  autoMinValue={true}
-                  curveType="monotone"
-                  className="h-16"
-                />
-              </div>
+            <div className="flex items-center gap-3 shrink-0">
+              
             </div>
             
             {/* Market stats that appear on hover */}
@@ -109,16 +92,7 @@ export function TopStocks({ limit = 3 }: TopStocksProps) {
               transition={{ duration: 0.2 }}
               className="absolute right-4 top-4 flex items-center gap-3"
             >
-              <div className="flex flex-col items-end">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">Vol</span>
-                  <span className="text-xs font-medium text-gray-800">{(stock.volume / 1000000).toFixed(1)}M</span>
-                </div>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-xs text-gray-500">Cap</span>
-                  <span className="text-xs font-medium text-gray-800">{(stock.marketCap / 1000000000).toFixed(1)}B</span>
-                </div>
-              </div>
+              
               
               <Link href={`/market/${stock.id}`} className="flex">
                 <Button variant="ghost" size="sm" className="rounded-full h-8 w-8 p-0 bg-gray-100 hover:bg-gray-200">

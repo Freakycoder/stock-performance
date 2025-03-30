@@ -143,21 +143,21 @@ export default function TransactionsPage() {
             className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
           >
             <div className="relative w-full sm:w-auto">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform text-black -translate-y-1/2 h-4 w-4" />
               <Input
                 type="text"
                 placeholder="Search transactions..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 h-10 w-full sm:w-[260px] rounded-xl border-gray-200"
+                className="pl-9 h-10 w-full sm:w-[260px] text-black rounded-xl focus:border-blue-500 border-gray-200"
               />
             </div>
             
             <Tabs value={filter} onValueChange={(value) => handleFilterChange(value as any)} className="w-full sm:w-auto">
               <TabsList className="h-10 bg-gray-100 w-full sm:w-auto rounded-xl">
-                <TabsTrigger value="all" className="flex-1 sm:flex-none rounded-lg">All</TabsTrigger>
-                <TabsTrigger value="buy" className="flex-1 sm:flex-none rounded-lg">Buy</TabsTrigger>
-                <TabsTrigger value="sell" className="flex-1 sm:flex-none rounded-lg">Sell</TabsTrigger>
+                <TabsTrigger value="all" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">All</TabsTrigger>
+                <TabsTrigger value="buy" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">Buy</TabsTrigger>
+                <TabsTrigger value="sell" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">Sell</TabsTrigger>
               </TabsList>
             </Tabs>
           </motion.div>
@@ -197,14 +197,7 @@ export default function TransactionsPage() {
               <span>Export</span>
             </Button>
             
-            <Button 
-              variant="default" 
-              size="sm" 
-              className="rounded-lg h-10 bg-blue-600 text-white hover:bg-blue-700"
-            >
-              <Plus className="h-4 w-4 mr-1.5" />
-              <span>New Transaction</span>
-            </Button>
+           
           </motion.div>
         </div>
         

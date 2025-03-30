@@ -17,13 +17,13 @@ export default function PortfolioPage() {
   const sectorAllocation = calculateSectorAllocation();
   const [activeTab, setActiveTab] = useState("overview");
   const [timeRange, setTimeRange] = useState("YTD");
-  
+
   // Format data for charts
   const allocationData = sectorAllocation.map(item => ({
     name: item.sector,
     value: item.percentage,
   }));
-  
+
   // Format data for holdings bar chart
   const holdingsData = portfolio.holdings
     .sort((a, b) => b.currentValue - a.currentValue)
@@ -31,7 +31,7 @@ export default function PortfolioPage() {
       name: holding.stock.symbol,
       "Value": holding.currentValue,
     }));
-    
+
   // Sample performance data for the line chart
   const performanceData = [
     { date: "Jan", Portfolio: 1.8, Benchmark: 1.2 },
@@ -75,8 +75,8 @@ export default function PortfolioPage() {
               <p className="ml-2 text-lg font-bold text-gray-800">{formatCurrency(portfolio.totalValue)}</p>
               <div className={cn(
                 "flex items-center gap-0.5 ml-3 text-sm font-medium",
-                portfolio.totalGainLossPercent >= 0 
-                  ? "text-green-600" 
+                portfolio.totalGainLossPercent >= 0
+                  ? "text-green-600"
                   : "text-red-600"
               )}>
                 {portfolio.totalGainLossPercent >= 0 ? (
@@ -89,16 +89,16 @@ export default function PortfolioPage() {
               </div>
             </div>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex items-center gap-3 flex-wrap"
           >
             <div className="relative inline-block text-left">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="rounded-lg border-gray-200 text-gray-700 flex items-center gap-1.5"
               >
                 <Calendar className="h-4 w-4 text-gray-500" />
@@ -108,24 +108,24 @@ export default function PortfolioPage() {
                 </svg>
               </Button>
             </div>
-            
-            <Button 
-              variant="outline" 
+
+            <Button
+              variant="outline"
               className="rounded-lg border-gray-200 text-gray-700 flex items-center gap-1.5"
             >
               <Download className="h-4 w-4 text-gray-500" />
               <span className="hidden sm:inline">Export</span>
             </Button>
-            
-            <Button 
-              variant="outline" 
+
+            <Button
+              variant="outline"
               className="rounded-lg border-gray-200 text-gray-700 flex items-center gap-1.5"
             >
               <Share2 className="h-4 w-4 text-gray-500" />
               <span className="hidden sm:inline">Share</span>
             </Button>
-            
-            <Button 
+
+            <Button
               variant="default"
               className="rounded-lg bg-blue-600 text-white hover:bg-blue-700 flex items-center gap-1.5"
             >
@@ -134,21 +134,21 @@ export default function PortfolioPage() {
             </Button>
           </motion.div>
         </div>
-        
+
         {/* Main analytics content with tabs */}
         <Card className="shadow-sm border-gray-200 bg-white overflow-hidden">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="px-6 pt-6 border-b border-gray-200">
-              <TabsList className="h-10 bg-gray-100 w-full sm:w-auto rounded-lg">
-                <TabsTrigger value="overview" className="rounded-md px-4">Overview</TabsTrigger>
-                <TabsTrigger value="performance" className="rounded-md px-4">Performance</TabsTrigger>
-                <TabsTrigger value="holdings" className="rounded-md px-4">Holdings</TabsTrigger>
-                <TabsTrigger value="transactions" className="rounded-md px-4">Transactions</TabsTrigger>
+              <TabsList className="h-10 bg-transparent w-full sm:w-auto rounded-lg">
+                <TabsTrigger value="overview" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">Overview</TabsTrigger>
+                <TabsTrigger value="performance" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">Performance</TabsTrigger>
+                <TabsTrigger value="holdings" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">Holdings</TabsTrigger>
+                <TabsTrigger value="transactions" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">Transactions</TabsTrigger>
               </TabsList>
             </div>
-          
+
             {/* Overview Tab */}
-            <TabsContent value="overview" className="p-6 space-y-6">
+            <TabsContent value="overview" className="p-6  space-y-6">
               {/* Stats Row */}
               <div className="grid gap-6 md:grid-cols-3 mb-6">
                 <motion.div
@@ -170,8 +170,8 @@ export default function PortfolioPage() {
                         <div className="flex items-center mt-1">
                           <span className={cn(
                             "flex items-center gap-1 text-sm font-medium",
-                            portfolio.totalGainLossPercent >= 0 
-                              ? "text-green-600" 
+                            portfolio.totalGainLossPercent >= 0
+                              ? "text-green-600"
                               : "text-red-600"
                           )}>
                             {portfolio.totalGainLossPercent >= 0 ? (
@@ -187,7 +187,7 @@ export default function PortfolioPage() {
                     </div>
                   </div>
                 </motion.div>
-                
+
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -205,9 +205,9 @@ export default function PortfolioPage() {
                         <p className="text-sm font-medium text-gray-500">Total Gain/Loss</p>
                         <p className="text-2xl font-bold mt-1 text-gray-800">{formatCurrency(portfolio.totalGainLoss)}</p>
                         <div className="flex items-center mt-1">
-                          <Badge 
+                          <Badge
                             variant={portfolio.totalGainLossPercent >= 0 ? "success" : "destructive"}
-                            className="flex items-center gap-1" 
+                            className="flex items-center gap-1"
                             rounded="full"
                           >
                             {formatCurrency(portfolio.totalGainLoss)}
@@ -217,7 +217,7 @@ export default function PortfolioPage() {
                     </div>
                   </div>
                 </motion.div>
-                
+
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -244,7 +244,7 @@ export default function PortfolioPage() {
                   </div>
                 </motion.div>
               </div>
-              
+
               {/* Charts Row */}
               <div className="grid gap-6 md:grid-cols-2">
                 {/* Sector Allocation */}
@@ -276,13 +276,13 @@ export default function PortfolioPage() {
                         showAnimation={true}
                         showLabel={false}
                       />
-                      
+
                       <div className="mt-6 space-y-2">
                         {sectorAllocation.slice(0, 4).map((sector, i) => (
                           <div key={sector.sector} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-none">
                             <div className="flex items-center">
-                              <div 
-                                className="h-3 w-3 rounded-full mr-3" 
+                              <div
+                                className="h-3 w-3 rounded-full mr-3"
                                 style={{ backgroundColor: customColors[i % customColors.length] }}
                               />
                               <span className="text-sm font-medium text-gray-700">{sector.sector}</span>
@@ -292,7 +292,7 @@ export default function PortfolioPage() {
                             </Badge>
                           </div>
                         ))}
-                        
+
                         {sectorAllocation.length > 4 && (
                           <Button variant="ghost" className="w-full text-blue-600 hover:text-blue-700 hover:bg-blue-50 gap-1 mt-2">
                             <span>View All Sectors</span>
@@ -303,7 +303,7 @@ export default function PortfolioPage() {
                     </CardContent>
                   </Card>
                 </motion.div>
-                
+
                 {/* Top Holdings */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -312,13 +312,13 @@ export default function PortfolioPage() {
                 >
                   <Card className="border-gray-200 overflow-hidden h-full shadow-sm">
                     <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
                           <BarChart3 className="h-5 w-5 text-blue-600" />
                           <CardTitle className="text-lg font-medium text-gray-800">Top Holdings</CardTitle>
                         </div>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           className="text-xs border-gray-200 text-gray-600 rounded-lg flex items-center gap-1.5"
                         >
@@ -335,13 +335,11 @@ export default function PortfolioPage() {
                           .map((holding, i) => (
                             <div key={holding.stockId} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-none">
                               <div className="flex items-center">
-                                <div 
+                                <div
                                   className="h-9 w-9 rounded-lg flex items-center justify-center mr-3 shadow-sm"
                                   style={{ backgroundColor: `${holding.stock.color}15` }}
                                 >
-                                  <span className="text-xs font-bold" style={{ color: holding.stock.color }}>
-                                    {holding.stock.symbol.slice(0, 2)}
-                                  </span>
+                                  <img className="rounded-lg" src={`${holding.logo}`}></img>
                                 </div>
                                 <div>
                                   <p className="font-medium text-gray-800">{holding.stock.name}</p>
@@ -367,9 +365,9 @@ export default function PortfolioPage() {
                             </div>
                           ))}
                       </div>
-                      
-                      <Button 
-                        variant="outline" 
+
+                      <Button
+                        variant="outline"
                         className="w-full mt-4 justify-center rounded-lg border-gray-200 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                       >
                         View All Holdings
@@ -379,62 +377,67 @@ export default function PortfolioPage() {
                   </Card>
                 </motion.div>
               </div>
-              
+
               {/* Insight Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="border-gray-200 overflow-hidden shadow-sm bg-gradient-to-br from-amber-50 to-white">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-600 mt-1">
-                        <AlertTriangle className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-800 text-lg">Concentration Risk</h3>
-                        <p className="mt-1 text-gray-600">Your technology sector allocation is 35%, which represents high concentration risk.</p>
-                        <Button className="mt-4 bg-amber-600 hover:bg-amber-700 text-white rounded-lg">
-                          Diversify Portfolio
-                        </Button>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-4">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-600 mt-1">
+                            <AlertTriangle className="h-5 w-10" />
+                          </div>
+                          <h3 className="font-medium text-gray-800 text-lg">Concentration Risk</h3>
+                        </div>
+                        <div>
+                          <p className="mt-1 text-gray-600">Your technology sector allocation is 35%, which represents high concentration risk.</p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 <Card className="border-gray-200 overflow-hidden shadow-sm bg-gradient-to-br from-blue-50 to-white">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 mt-1">
-                        <Sparkles className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-800 text-lg">Opportunity Detected</h3>
-                        <p className="mt-1 text-gray-600">Market dip in healthcare sector presents buying opportunity for diversification.</p>
-                        <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-                          Explore Opportunities
-                        </Button>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-4">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 mt-1">
+                            <Sparkles className="h-5 w-10" />
+                          </div>
+                          <h3 className="font-medium text-gray-800 text-lg">Opportunity Detected</h3>
+                        </div>
+                        <div>
+                          <p className="mt-1 text-gray-600">Market dip in healthcare sector presents buying opportunity for diversification.</p>
+
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 <Card className="border-gray-200 overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-white">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 mt-1">
-                        <Info className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-800 text-lg">Performance Insight</h3>
-                        <p className="mt-1 text-gray-600">Your portfolio is outperforming the S&P 500 by 3.2% YTD, with lower volatility.</p>
-                        <Button className="mt-4 bg-green-600 hover:bg-green-700 text-white rounded-lg">
-                          View Details
-                        </Button>
+                      <div className="flex flex-col gap-2">
+
+                        <div className="flex gap-4">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 mt-1">
+                            <Info className="h-5 w-10" />
+                          </div>
+                          <h3 className="font-medium text-gray-800 text-lg">Performance Insight</h3>
+                        </div>
+                        <div>
+                          <p className="mt-1 text-gray-600">Your portfolio is outperforming the S&P 500 by 3.2% YTD, with lower volatility.</p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
             </TabsContent>
-            
+
             {/* Performance Tab */}
             <TabsContent value="performance" className="p-6 space-y-6">
               <div className="space-y-6">
@@ -465,7 +468,7 @@ export default function PortfolioPage() {
                         className="h-80"
                       />
                     </div>
-                    
+
                     <div className="mt-6 flex items-center justify-between p-4 rounded-xl bg-blue-50 border border-blue-100">
                       <div className="flex items-start gap-3">
                         <Info className="h-5 w-5 text-blue-600 mt-0.5" />
@@ -480,7 +483,7 @@ export default function PortfolioPage() {
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <Card className="border-gray-200 shadow-sm bg-white">
                     <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
@@ -501,7 +504,7 @@ export default function PortfolioPage() {
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card className="border-gray-200 shadow-sm bg-white">
                     <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
                       <CardTitle className="text-lg font-medium text-gray-800">Performance Metrics</CardTitle>
@@ -518,7 +521,7 @@ export default function PortfolioPage() {
                           </div>
                           <p className="mt-2 text-xs text-gray-500">Higher than 67% of similar portfolios</p>
                         </div>
-                        
+
                         <div className="rounded-xl p-4 bg-gray-50 border border-gray-200">
                           <div className="flex justify-between items-center">
                             <h3 className="font-medium text-gray-800">Alpha</h3>
@@ -529,7 +532,7 @@ export default function PortfolioPage() {
                           </div>
                           <p className="mt-2 text-xs text-gray-500">Excess return relative to benchmark</p>
                         </div>
-                        
+
                         <div className="rounded-xl p-4 bg-gray-50 border border-gray-200">
                           <div className="flex justify-between items-center">
                             <h3 className="font-medium text-gray-800">Beta</h3>
@@ -546,7 +549,7 @@ export default function PortfolioPage() {
                 </div>
               </div>
             </TabsContent>
-            
+
             {/* Holdings Tab */}
             <TabsContent value="holdings" className="p-0">
               <div className="border-b border-gray-200 p-4 flex justify-between items-center">
@@ -573,7 +576,7 @@ export default function PortfolioPage() {
                   </Button>
                 </div>
               </div>
-            
+
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50">
@@ -589,7 +592,7 @@ export default function PortfolioPage() {
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {portfolio.holdings.map((holding, i) => (
-                      <motion.tr 
+                      <motion.tr
                         key={holding.stockId}
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -598,13 +601,11 @@ export default function PortfolioPage() {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div 
-                              className="h-10 w-10 rounded-lg flex items-center justify-center shadow-sm"
+                            <div
+                              className="h-10 bg-white w-12 rounded-lg flex items-center justify-center shadow-sm"
                               style={{ backgroundColor: `${holding.stock.color}15` }}
                             >
-                              <span className="text-xs font-bold" style={{ color: holding.stock.color }}>
-                                {holding.stock.symbol.slice(0, 2)}
-                              </span>
+                              <img className="rounded-lg" src={`${holding.logo}`}></img>
                             </div>
                             <div>
                               <p className="font-medium text-gray-800">{holding.stock.name}</p>
@@ -627,9 +628,9 @@ export default function PortfolioPage() {
                               {holding.gainLoss >= 0 ? "+" : ""}
                               {formatCurrency(holding.gainLoss)}
                             </span>
-                            <Badge 
+                            <Badge
                               variant={holding.gainLoss >= 0 ? "success" : "destructive"}
-                              className="mt-1" 
+                              className="mt-1"
                               size="sm"
                               rounded="full"
                             >

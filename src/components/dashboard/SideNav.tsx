@@ -75,10 +75,10 @@ export function SideNav({ isOpen, onClose }: SideNavProps) {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-y-0 left-0 z-40 w-64 border-r bg-white p-6 shadow-lg lg:hidden dark:bg-gray-950 dark:border-gray-800"
+            className="fixed inset-y-0 left-0 z-40 w-64 border-r bg-white p-6 shadow-lg lg:hidden"
           >
             <div className="mb-8 flex items-center">
-              <DollarSign className="mr-2 h-6 w-6 text-blue-600 dark:text-blue-500" />
+              <DollarSign className="mr-2 h-6 w-6 text-blue-600" />
               <span className="text-xl font-bold">Finance</span>
             </div>
             <nav className="space-y-1">
@@ -90,8 +90,8 @@ export function SideNav({ isOpen, onClose }: SideNavProps) {
                   className={cn(
                     "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     pathname === item.href
-                      ? "bg-blue-600/10 text-blue-600 dark:bg-blue-500/10 dark:text-blue-500"
-                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
+                      ? "bg-blue-600/10 text-blue-600"
+                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                   )}
                 >
                   <item.icon className="mr-3 h-5 w-5" />
@@ -100,11 +100,11 @@ export function SideNav({ isOpen, onClose }: SideNavProps) {
               ))}
             </nav>
             <div className="absolute bottom-6 left-6 right-6">
-              <div className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50">
+              <div className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900">
                 <User2 className="mr-3 h-5 w-5" />
                 Profile
               </div>
-              <div className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50">
+              <div className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900">
                 <Settings className="mr-3 h-5 w-5" />
                 Settings
               </div>
@@ -117,12 +117,12 @@ export function SideNav({ isOpen, onClose }: SideNavProps) {
 
   // Desktop sidebar - always visible
   const desktopSidebar = (
-    <div className="hidden h-screen w-64 flex-col border-r bg-white px-4 py-6 lg:flex dark:bg-gray-950 dark:border-gray-800">
+    <div className="hidden h-screen w-64 flex-col border-r bg-white px-4 py-6 lg:flex">
       <div className="mb-8 flex items-center px-2">
-        <DollarSign className="mr-2 h-6 w-6 text-blue-600 dark:text-blue-500" />
+        <DollarSign className="mr-2 h-6 w-6 text-blue-600" />
         <span className="text-xl font-bold">Finance</span>
       </div>
-      <nav className="space-y-1">
+      <nav className="space-y-1 overflow-y-auto flex-grow">
         {navItems.map((item, index) => (
           <motion.div
             key={item.href}
@@ -138,12 +138,12 @@ export function SideNav({ isOpen, onClose }: SideNavProps) {
               className={cn(
                 "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 pathname === item.href
-                  ? "bg-blue-600/10 text-blue-600 dark:bg-blue-500/10 dark:text-blue-500"
-                  : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
+                  ? "bg-blue-600/10 text-blue-600"
+                  : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
               )}
             >
-              <item.icon className="mr-3 h-5 w-5" />
-              {item.title}
+              <item.icon className="mr-3 h-5 w-5 shrink-0" />
+              <span className="truncate">{item.title}</span>
             </Link>
           </motion.div>
         ))}
@@ -151,17 +151,17 @@ export function SideNav({ isOpen, onClose }: SideNavProps) {
       <div className="mt-auto space-y-1">
         <Link
           href="/profile"
-          className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
+          className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
         >
-          <User2 className="mr-3 h-5 w-5" />
-          Profile
+          <User2 className="mr-3 h-5 w-5 shrink-0" />
+          <span className="truncate">Profile</span>
         </Link>
         <Link
           href="/settings"
-          className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
+          className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
         >
-          <Settings className="mr-3 h-5 w-5" />
-          Settings
+          <Settings className="mr-3 h-5 w-5 shrink-0" />
+          <span className="truncate">Settings</span>
         </Link>
       </div>
     </div>

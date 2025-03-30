@@ -29,6 +29,7 @@ export interface PortfolioHolding {
   stockId: string;
   shares: number;
   averageCost: number;
+  logo : string
 }
 
 export interface PortfolioHoldingWithDetails extends PortfolioHolding {

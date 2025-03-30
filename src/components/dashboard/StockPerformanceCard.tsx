@@ -49,14 +49,14 @@ export function StockPerformanceCard({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <Card className="overflow-hidden border-gray-200 bg-white shadow-sm h-full transition-all duration-200 hover:shadow-md">
-        <CardContent className="p-0">
+      <Card className="flex flex-col overflow-hidden border-gray-200 bg-white shadow-sm h-full transition-all duration-200 hover:shadow-md">
+        <CardContent className="p-0 flex-1 flex flex-col">
           {/* Header section */}
           <div className="p-5">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <div 
-                  className="flex h-12 w-12 items-center justify-center rounded-xl shadow-sm" 
+                  className="flex h-12 w-12 items-center justify-center rounded-xl shadow-sm shrink-0" 
                   style={{ backgroundColor: `${stock.color}15` }}
                 >
                   <span 
@@ -66,8 +66,8 @@ export function StockPerformanceCard({
                     {stock.symbol.slice(0, 2)}
                   </span>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 line-clamp-1">{stock.name}</h3>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-gray-800 truncate">{stock.name}</h3>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs font-medium text-gray-500">{stock.symbol}</span>
                     <Badge variant={isPositive ? "success" : "destructive"} className="h-5 flex items-center gap-0.5" rounded="full">
@@ -78,7 +78,7 @@ export function StockPerformanceCard({
                 </div>
               </div>
               {href && !isHovered && (
-                <Link href={href} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <Link href={href} className="text-gray-400 hover:text-gray-600 transition-colors shrink-0">
                   <ExternalLink className="h-4 w-4" />
                 </Link>
               )}
@@ -88,7 +88,7 @@ export function StockPerformanceCard({
                 <motion.div 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 shrink-0"
                 >
                   <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full bg-gray-100 text-gray-600">
                     <Plus className="h-4 w-4" />
@@ -109,7 +109,7 @@ export function StockPerformanceCard({
           </div>
 
           {/* Chart section */}
-          <div className="h-40 px-2">
+          <div className="h-40 px-2 flex-grow">
             <AreaChart
               data={chartData}
               index="date"
@@ -122,21 +122,21 @@ export function StockPerformanceCard({
               showTooltip={true}
               autoMinValue={true}
               curveType="monotone"
-              className="h-40"
+              className="h-40 w-full"
             />
           </div>
 
           {/* Stats section */}
-          <div className="grid grid-cols-2 divide-x border-t border-gray-200">
+          <div className="grid grid-cols-2 divide-x border-t border-gray-200 mt-auto">
             <div className="p-4 text-center">
               <p className="text-xs text-gray-500">Price</p>
-              <p className="text-base font-semibold text-gray-800 mt-1">
+              <p className="text-base font-semibold text-gray-800 mt-1 truncate">
                 {formatCurrency(stock.price)}
               </p>
             </div>
             <div className="p-4 text-center">
               <p className="text-xs text-gray-500">Market Cap</p>
-              <p className="text-base font-semibold text-gray-800 mt-1">
+              <p className="text-base font-semibold text-gray-800 mt-1 truncate">
                 {formatCompactNumber(stock.marketCap)}
               </p>
             </div>
@@ -155,25 +155,25 @@ export function StockPerformanceCard({
             <div className="grid grid-cols-3 divide-x">
               <div className="p-3 text-center">
                 <p className="text-xs text-gray-500">Volume</p>
-                <p className="text-sm font-medium text-gray-800">
+                <p className="text-sm font-medium text-gray-800 truncate">
                   {(stock.volume / 1000000).toFixed(1)}M
                 </p>
               </div>
               <div className="p-3 text-center">
                 <p className="text-xs text-gray-500">High</p>
-                <p className="text-sm font-medium text-gray-800">
+                <p className="text-sm font-medium text-gray-800 truncate">
                   {formatCurrency(highValue)}
                 </p>
               </div>
               <div className="p-3 text-center">
                 <p className="text-xs text-gray-500">Low</p>
-                <p className="text-sm font-medium text-gray-800">
+                <p className="text-sm font-medium text-gray-800 truncate">
                   {formatCurrency(lowValue)}
                 </p>
               </div>
             </div>
             <div className="p-3 bg-gray-50 text-center border-t border-gray-200">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 truncate">
                 {stock.sector} • {(stock.marketCap / 1000000000).toFixed(1)}B Market Cap
               </p>
             </div>

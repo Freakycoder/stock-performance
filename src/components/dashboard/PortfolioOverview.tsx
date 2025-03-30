@@ -58,8 +58,8 @@ export function PortfolioOverview() {
   }, {} as Record<string, number>);
 
   return (
-    <Card className="overflow-hidden border-gray-200 shadow-sm bg-white">
-      <CardHeader className="bg-gray-50 px-6 py-5 border-b border-gray-200">
+    <Card className="flex flex-col overflow-hidden border-gray-200 shadow-sm bg-white h-full">
+      <CardHeader className="flex-shrink-0 bg-gray-50 px-6 py-5 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-gray-800">Portfolio Overview</CardTitle>
           <motion.button
@@ -72,8 +72,8 @@ export function PortfolioOverview() {
           </motion.button>
         </div>
       </CardHeader>
-      <CardContent className="p-6">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <CardContent className="flex-1 overflow-auto p-6">
+        <div className="grid grid-cols-2 gap-6">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.title}
@@ -86,7 +86,7 @@ export function PortfolioOverview() {
                   <p className="text-sm font-medium text-gray-500">{stat.title}</p>
                   <stat.icon className={cn("h-5 w-5", stat.iconColor)} />
                 </div>
-                <p className="mt-3 text-2xl font-bold text-gray-800">{stat.value}</p>
+                <p className="mt-3 text-xl font-bold text-gray-800 truncate">{stat.value}</p>
                 <div className="mt-2 flex items-center">
                   <div
                     className={cn(
@@ -112,11 +112,12 @@ export function PortfolioOverview() {
         
         <div className="mt-8">
           <h3 className="mb-4 text-base font-medium text-gray-700">Portfolio Breakdown</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-2 gap-8 items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
+              className="max-w-[300px] mx-auto w-full"
             >
               <DonutChart
                 data={pieData}
@@ -129,7 +130,7 @@ export function PortfolioOverview() {
               />
             </motion.div>
             
-            <div className="space-y-4">
+            <div className="space-y-4 overflow-auto max-h-[300px] pr-2">
               <h4 className="font-medium text-gray-700">Asset Allocation</h4>
               {Object.entries(assetAllocation).map(([sector, value], i) => {
                 const percentage = (value / totalValue) * 100;
@@ -142,14 +143,14 @@ export function PortfolioOverview() {
                     className="space-y-1"
                   >
                     <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
                         <div 
-                          className="h-3 w-3 rounded-full" 
+                          className="h-3 w-3 rounded-full flex-shrink-0" 
                           style={{ backgroundColor: customColors[i % customColors.length] }}
                         ></div>
-                        <span className="font-medium text-gray-700">{sector}</span>
+                        <span className="font-medium text-gray-700 truncate">{sector}</span>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 shrink-0">
                         <span className="text-gray-500">{formatCurrency(value)}</span>
                         <span className="font-medium text-gray-700 bg-gray-100 rounded-full px-2 py-0.5 text-xs">
                           {percentage.toFixed(1)}%
@@ -177,53 +178,55 @@ export function PortfolioOverview() {
         
         <div className="mt-8 space-y-4">
           <h3 className="text-base font-medium text-gray-700">Top Holdings</h3>
-          {portfolio.holdings
-            ?.sort((a, b) => b?.currentValue! - a?.currentValue!)
-            .slice(0, 3)
-            .map((holding, i) => (
-              <motion.div
-                key={holding?.stockId}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                className="flex items-center justify-between rounded-xl border border-gray-200 p-4 hover:shadow-sm transition-shadow duration-200"
-              >
-                <div className="flex items-center">
-                  <div 
-                    className="mr-4 h-10 w-10 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: `${holding?.stock.color}15` }}
-                  >
-                    <span className="text-sm font-bold" style={{ color: holding?.stock.color }}>
-                      {holding?.stock.symbol.slice(0, 2)}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-800">{holding?.stock.name}</p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <p className="text-xs text-gray-500">{holding?.shares} shares</p>
-                      <span className="h-1 w-1 rounded-full bg-gray-300"></span>
-                      <p className="text-xs text-gray-500">Avg. {formatCurrency(holding?.averageCost!)}/share</p>
+          <div className="overflow-auto max-h-[350px] pr-2">
+            {portfolio.holdings
+              ?.sort((a, b) => b?.currentValue! - a?.currentValue!)
+              .slice(0, 3)
+              .map((holding, i) => (
+                <motion.div
+                  key={holding?.stockId}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
+                  className="flex items-center justify-between rounded-xl border border-gray-200 p-4 hover:shadow-sm transition-shadow duration-200 mb-3"
+                >
+                  <div className="flex items-center min-w-0">
+                    <div 
+                      className="mr-4 h-10 w-10 rounded-full flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: `${holding?.stock.color}15` }}
+                    >
+                      <span className="text-sm font-bold" style={{ color: holding?.stock.color }}>
+                        {holding?.stock.symbol.slice(0, 2)}
+                      </span>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-medium text-gray-800 truncate max-w-[180px]">{holding?.stock.name}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <p className="text-xs text-gray-500">{holding?.shares} shares</p>
+                        <span className="h-1 w-1 rounded-full bg-gray-300"></span>
+                        <p className="text-xs text-gray-500">Avg. {formatCurrency(holding?.averageCost!)}/share</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold text-gray-800">{formatCurrency(holding?.currentValue!)}</p>
-                  <div
-                    className={cn(
-                      "inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-medium mt-0.5",
-                      holding?.gainLoss! >= 0 ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
-                    )}
-                  >
-                    {holding?.gainLoss! >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-                    {holding?.gainLoss! >= 0 ? "+" : ""}
-                    {formatPercentage(holding?.gainLossPercent!)}
+                  <div className="text-right shrink-0 min-w-[100px]">
+                    <p className="font-semibold text-gray-800">{formatCurrency(holding?.currentValue!)}</p>
+                    <div
+                      className={cn(
+                        "inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-medium mt-0.5",
+                        holding?.gainLoss! >= 0 ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+                      )}
+                    >
+                      {holding?.gainLoss! >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                      {holding?.gainLoss! >= 0 ? "+" : ""}
+                      {formatPercentage(holding?.gainLossPercent!)}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+          </div>
         </div>
       </CardContent>
-      <CardFooter className="border-t border-gray-200 p-4 bg-white">
+      <CardFooter className="flex-shrink-0 border-t border-gray-200 p-4 bg-white">
         <button className="flex w-full items-center justify-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
           View All Holdings
           <ChevronRight className="h-4 w-4" />

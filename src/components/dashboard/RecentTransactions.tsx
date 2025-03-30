@@ -32,9 +32,9 @@ export function RecentTransactions({ limit = 5 }: RecentTransactionsProps) {
   const limitedTransactions = filteredTransactions.slice(0, limit);
 
   return (
-    <Card className="overflow-hidden bg-white border-gray-200 shadow-sm h-full">
-      <CardHeader className="p-6 border-b border-gray-200 bg-gray-50">
-        <div className="flex items-center justify-between">
+    <Card className="flex flex-col overflow-hidden bg-white border-gray-200 shadow-sm h-full">
+      <CardHeader className="flex-shrink-0 p-6 border-b border-gray-200 bg-gray-50">
+        <div className="flex items-center gap-2">
           <div className="flex items-center gap-3">
             <div className="rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 p-2 text-white">
               <Calendar className="h-5 w-5" />
@@ -74,14 +74,11 @@ export function RecentTransactions({ limit = 5 }: RecentTransactionsProps) {
                 Sell
               </button>
             </div>
-            <Button variant="outline" size="sm" className="rounded-lg flex items-center gap-1.5 border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
-              <Filter className="h-4 w-4" />
-              Filter
-            </Button>
+            
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="flex-1 overflow-auto p-0">
         <div className="divide-y divide-gray-100">
           {limitedTransactions.length > 0 ? (
             limitedTransactions.map((transaction, i) => {
@@ -97,7 +94,7 @@ export function RecentTransactions({ limit = 5 }: RecentTransactionsProps) {
                   transition={{ duration: 0.3, delay: i * 0.05 }}
                   className="group flex items-center justify-between p-5 hover:bg-gray-50 transition-colors relative"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 min-w-0">
                     <div 
                       className={cn(
                         "flex h-12 w-12 items-center justify-center rounded-lg shrink-0",
@@ -112,9 +109,9 @@ export function RecentTransactions({ limit = 5 }: RecentTransactionsProps) {
                         <ArrowUp className="h-5 w-5" />
                       )}
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-gray-800">
+                        <p className="font-medium text-gray-800 truncate max-w-[200px]">
                           {transaction.type === 'buy' ? 'Bought' : 'Sold'} {stock.symbol}
                         </p>
                         <Badge variant={transaction.type === 'buy' ? 'outline' : 'secondary'} className="capitalize">
@@ -122,21 +119,21 @@ export function RecentTransactions({ limit = 5 }: RecentTransactionsProps) {
                         </Badge>
                       </div>
                       <div className="flex items-center gap-3 mt-1">
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 truncate">
                           {transaction.shares} {transaction.shares === 1 ? 'share' : 'shares'} @ {formatCurrency(transaction.price)}
                         </p>
                         <div className="flex items-center">
                           <span className="inline-block h-1 w-1 rounded-full bg-gray-300"></span>
                         </div>
-                        <p className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-500">
+                        <p className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-500 shrink-0">
                           {format(parseISO(transaction.date), 'MMM d, yyyy')}
                         </p>
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right min-w-[120px] shrink-0">
                     <p className={cn(
-                      "text-lg font-bold",
+                      "text-lg font-bold truncate",
                       transaction.type === 'buy' ? "text-gray-800" : "text-green-600"
                     )}>
                       {transaction.type === 'buy' ? '-' : '+'}
@@ -164,7 +161,7 @@ export function RecentTransactions({ limit = 5 }: RecentTransactionsProps) {
           )}
         </div>
       </CardContent>
-      <CardFooter className="p-4 border-t border-gray-200 bg-gray-50">
+      <CardFooter className="flex-shrink-0 p-4 border-t border-gray-200 bg-gray-50">
         <Link 
           href="/transactions" 
           className="w-full"

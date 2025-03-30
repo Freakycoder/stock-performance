@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { calculateSectorAllocation } from "@/lib/stockData";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { DonutChart } from "@tremor/react";
-import { Sparkles, TrendingUp, PieChart, AlertCircle, ChevronDown } from "lucide-react";
+import { TrendingUp, PieChart, AlertCircle } from "lucide-react";
 
 export function PortfolioAllocation() {
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
@@ -70,8 +70,8 @@ export function PortfolioAllocation() {
   const recommendation = getRecommendation();
 
   return (
-    <Card className="overflow-hidden bg-white border-gray-200 shadow-sm h-full">
-      <CardHeader className="p-6 border-b border-gray-200 bg-gray-50">
+    <Card className="flex flex-col overflow-hidden bg-white border-gray-200 shadow-sm h-full">
+      <CardHeader className="flex-shrink-0 p-6 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
@@ -79,13 +79,10 @@ export function PortfolioAllocation() {
             </div>
             <CardTitle className="text-xl font-bold text-gray-800">Portfolio Allocation</CardTitle>
           </div>
-          <button className="flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50">
-            <span>Options</span>
-            <ChevronDown className="h-4 w-4" />
-          </button>
+          
         </div>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="flex-1 overflow-auto p-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -107,7 +104,7 @@ export function PortfolioAllocation() {
               index="name"
               valueFormatter={valueFormatter}
               colors={customColors}
-              className="h-64 mt-4"
+              className="h-64 mt-4 w-full max-w-[400px]"
               showLabel={false}
               showAnimation={true}
               onValueChange={(v) => setSelectedSector(v?.name || null)}
@@ -115,7 +112,7 @@ export function PortfolioAllocation() {
           </div>
         </motion.div>
         
-        <div className="mt-8 space-y-2">
+        <div className="mt-6 space-y-2 max-h-[350px] overflow-auto">
           <h3 className="text-base font-medium text-gray-700 mb-3">Allocation Details</h3>
           {sectorAllocation.map((sector, i) => (
             <motion.div
@@ -127,16 +124,16 @@ export function PortfolioAllocation() {
               className={`flex items-center justify-between py-3 px-3 rounded-lg transition-colors ${selectedSector === sector.sector ? 'bg-blue-50 border border-blue-100' : 'border border-transparent hover:bg-gray-50'}`}
               onClick={() => setSelectedSector(selectedSector === sector.sector ? null : sector.sector)}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <div 
-                  className="h-3 w-3 rounded-full" 
+                  className="h-3 w-3 rounded-full flex-shrink-0" 
                   style={{ backgroundColor: customColors[i % customColors.length] }}
                 />
-                <span className="text-base font-medium text-gray-700">{sector.sector}</span>
+                <span className="text-base font-medium text-gray-700 truncate">{sector.sector}</span>
               </div>
-              <div className="flex gap-6 items-center">
-                <span className="text-sm text-gray-500 w-28 text-right">{formatCurrency(sector.value)}</span>
-                <div className="relative w-20">
+              <div className="flex gap-3 items-center">
+                <span className="text-sm text-gray-500 w-24 text-right truncate">{formatCurrency(sector.value)}</span>
+                <div className="relative w-16 hidden lg:block">
                   <div className="h-2 w-full rounded-full bg-gray-100">
                     <motion.div 
                       className="absolute top-0 left-0 h-2 rounded-full" 
@@ -147,7 +144,7 @@ export function PortfolioAllocation() {
                     />
                   </div>
                 </div>
-                <span className="text-sm font-semibold w-16 text-right bg-gray-100 px-2 py-1 rounded-lg">{formatPercentage(sector.percentage)}</span>
+                <span className="text-sm font-semibold min-w-16 text-right bg-gray-100 px-2 py-1 rounded-lg">{formatPercentage(sector.percentage)}</span>
               </div>
             </motion.div>
           ))}
@@ -160,7 +157,7 @@ export function PortfolioAllocation() {
             exit={{ opacity: 0, y: 10 }}
             className="mt-6 p-4 border border-blue-100 rounded-xl bg-blue-50"
           >
-            <h4 className="font-medium text-gray-800">{selectedSector} Allocation</h4>
+            <h4 className="font-medium text-gray-800 truncate">{selectedSector} Allocation</h4>
             <p className="text-sm text-gray-600 mt-1">
               {selectedSector} makes up {
                 formatPercentage(sectorAllocation.find(s => s.sector === selectedSector)?.percentage || 0)
