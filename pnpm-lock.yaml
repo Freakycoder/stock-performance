@@ -8,6 +8,21 @@ importers:
 
   .:
     dependencies:
+      '@tremor/react':
+        specifier: ^3.18.7
+        version: 3.18.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      apexcharts:
+        specifier: ^4.5.0
+        version: 4.5.0
+      chart.js:
+        specifier: ^4.4.8
+        version: 4.4.8
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       framer-motion:
         specifier: ^12.6.2
         version: 12.6.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -21,32 +36,41 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0
+      react-apexcharts:
+        specifier: ^1.7.0
+        version: 1.7.0(apexcharts@4.5.0)(react@19.1.0)
+      react-chartjs-2:
+        specifier: ^5.3.0
+        version: 5.3.0(chart.js@4.4.8)(react@19.1.0)
       react-dom:
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
       recharts:
         specifier: ^2.15.1
         version: 2.15.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      tailwind-merge:
+        specifier: ^3.0.2
+        version: 3.0.2
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.0.17
       '@types/node':
-        specifier: ^20
+        specifier: ^20.17.28
         version: 20.17.28
       '@types/react':
-        specifier: ^19
+        specifier: ^19.0.12
         version: 19.0.12
       '@types/react-dom':
-        specifier: ^19
+        specifier: ^19.0.4
         version: 19.0.4(@types/react@19.0.12)
       tailwindcss:
         specifier: ^4
         version: 4.0.17
       typescript:
-        specifier: ^5
+        specifier: ^5.8.2
         version: 5.8.2
 
 packages:
@@ -61,6 +85,46 @@ packages:
 
   '@emnapi/runtime@1.4.0':
     resolution: {integrity: sha512-64WYIf4UYcdLnbKn/umDlNjQDSS8AgZrI/R9+x5ilkUVFxXcA1Ebl+gQLc/6mERA4407Xof0R7wEyEuj091CVw==}
+
+  '@floating-ui/core@1.6.9':
+    resolution: {integrity: sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==}
+
+  '@floating-ui/dom@1.6.13':
+    resolution: {integrity: sha512-umqzocjDgNRGTuO7Q8CU32dkHkECqI8ZdMZ5Swb6QAM0t5rnlrN3lGo1hdpscRd3WS8T6DKYK4ephgIH9iRh3w==}
+
+  '@floating-ui/react-dom@1.3.0':
+    resolution: {integrity: sha512-htwHm67Ji5E/pROEAr7f8IKFShuiCKHwUC/UY4vC3I5jiSvGFAYnSYiZO5MlGmads+QqvUkR9ANHEguGrDv72g==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@floating-ui/react-dom@2.1.2':
+    resolution: {integrity: sha512-06okr5cgPzMNBy+Ycse2A6udMi4bqwW/zgBF/rwjcNqWkyr82Mcg8b0vjX8OJpZFy/FKjJmw6wV7t44kK6kW7A==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@floating-ui/react@0.19.2':
+    resolution: {integrity: sha512-JyNk4A0Ezirq8FlXECvRtQOX/iBe5Ize0W/pLkrZjfHW9GUV7Xnq6zm6fyZuQzaHHqEnVizmvlA96e1/CkZv+w==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@floating-ui/react@0.26.28':
+    resolution: {integrity: sha512-yORQuuAtVpiRjpMhdc0wJj06b9JFjrYF4qp96j++v2NBpbi6SEGF7donUJ3TMieerQ6qVkAv1tgr7L4r5roTqw==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@floating-ui/utils@0.2.9':
+    resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+
+  '@headlessui/react@2.2.0':
+    resolution: {integrity: sha512-RzCEg+LXsuI7mHiSomsu/gBJSjpupm6A1qIZ5sWjd7JhARNlMiSA4kKfJpCKwU9tE+zMRterhhrP74PvfJrpXQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^18 || ^19 || ^19.0.0-rc
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -179,6 +243,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@kurkle/color@0.3.4':
+    resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
+
   '@next/env@15.2.4':
     resolution: {integrity: sha512-+SFtMgoiYP3WoSswuNmxJOCwi06TdWE733D+WPjpXIe4LXGULwEaofiiAy6kbS0+XjM5xF5n3lKuBwN2SnqD9g==}
 
@@ -233,6 +300,68 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
+
+  '@react-aria/focus@3.20.1':
+    resolution: {integrity: sha512-lgYs+sQ1TtBrAXnAdRBQrBo0/7o5H6IrfDxec1j+VRpcXL0xyk0xPq+m3lZp8typzIghqDgpnKkJ5Jf4OrzPIw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/interactions@3.24.1':
+    resolution: {integrity: sha512-OWEcIC6UQfWq4Td5Ptuh4PZQ4LHLJr/JL2jGYvuNL6EgL3bWvzPrRYIF/R64YbfVxIC7FeZpPSkS07sZ93/NoA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/ssr@3.9.7':
+    resolution: {integrity: sha512-GQygZaGlmYjmYM+tiNBA5C6acmiDWF52Nqd40bBp0Znk4M4hP+LTmI0lpI1BuKMw45T8RIhrAsICIfKwZvi2Gg==}
+    engines: {node: '>= 12'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/utils@3.28.1':
+    resolution: {integrity: sha512-mnHFF4YOVu9BRFQ1SZSKfPhg3z+lBRYoW5mLcYTQihbKhz48+I1sqRkP7ahMITr8ANH3nb34YaMME4XWmK2Mgg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/flags@3.1.0':
+    resolution: {integrity: sha512-KSHOCxTFpBtxhIRcKwsD1YDTaNxFtCYuAUb0KEihc16QwqZViq4hasgPBs2gYm7fHRbw7WYzWKf6ZSo/+YsFlg==}
+
+  '@react-stately/utils@3.10.5':
+    resolution: {integrity: sha512-iMQSGcpaecghDIh3mZEpZfoFH3ExBwTtuBEcvZ2XnGzCgQjeYXcMdIUwAfVQLXFTdHUHGF6Gu6/dFrYsCzySBQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/shared@3.28.0':
+    resolution: {integrity: sha512-9oMEYIDc3sk0G5rysnYvdNrkSg7B04yTKl50HHSZVbokeHpnU0yRmsDaWb9B/5RprcKj8XszEk5guBO8Sa/Q+Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@svgdotjs/svg.draggable.js@3.0.6':
+    resolution: {integrity: sha512-7iJFm9lL3C40HQcqzEfezK2l+dW2CpoVY3b77KQGqc8GXWa6LhhmX5Ckv7alQfUXBuZbjpICZ+Dvq1czlGx7gA==}
+    peerDependencies:
+      '@svgdotjs/svg.js': ^3.2.4
+
+  '@svgdotjs/svg.filter.js@3.0.9':
+    resolution: {integrity: sha512-/69XMRCDoam2HgC4ldHIaDgeQf1ViHIsa0Ld4uWgiXtZ+E24DWHe/9Ib6kbNiZ7WRIdlVokUDR1Fg0kjIpkfbw==}
+    engines: {node: '>= 0.8.0'}
+
+  '@svgdotjs/svg.js@3.2.4':
+    resolution: {integrity: sha512-BjJ/7vWNowlX3Z8O4ywT58DqbNRyYlkk6Yz/D13aB7hGmfQTvGX4Tkgtm/ApYlu9M7lCQi15xUEidqMUmdMYwg==}
+
+  '@svgdotjs/svg.resize.js@2.0.5':
+    resolution: {integrity: sha512-4heRW4B1QrJeENfi7326lUPYBCevj78FJs8kfeDxn5st0IYPIRXoTtOSYvTzFWgaWWXd3YCDE6ao4fmv91RthA==}
+    engines: {node: '>= 14.18'}
+    peerDependencies:
+      '@svgdotjs/svg.js': ^3.2.4
+      '@svgdotjs/svg.select.js': ^4.0.1
+
+  '@svgdotjs/svg.select.js@4.0.2':
+    resolution: {integrity: sha512-5gWdrvoQX3keo03SCmgaBbD+kFftq0F/f2bzCbNnpkkvW6tk4rl4MakORzFuNjvXPWwB4az9GwuvVxQVnjaK2g==}
+    engines: {node: '>= 14.18'}
+    peerDependencies:
+      '@svgdotjs/svg.js': ^3.2.4
 
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
@@ -320,6 +449,21 @@ packages:
   '@tailwindcss/postcss@4.0.17':
     resolution: {integrity: sha512-qeJbRTB5FMZXmuJF+eePd235EGY6IyJZF0Bh0YM6uMcCI4L9Z7dy+lPuLAhxOJzxnajsbjPoDAKOuAqZRtf1PQ==}
 
+  '@tanstack/react-virtual@3.13.5':
+    resolution: {integrity: sha512-MzSSMGkFWCDSb2xXqmdbfQqBG4wcRI3JKVjpYGZG0CccnViLpfRW4tGU97ImfBbSYzvEWJ/2SK/OiIoSmcUBAA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  '@tanstack/virtual-core@3.13.5':
+    resolution: {integrity: sha512-gMLNylxhJdUlfRR1G3U9rtuwUh2IjdrrniJIDcekVJN3/3i+bluvdMi3+eodnxzJq5nKnxnigo9h0lIpaqV6HQ==}
+
+  '@tremor/react@3.18.7':
+    resolution: {integrity: sha512-nmqvf/1m0GB4LXc7v2ftdfSLoZhy5WLrhV6HNf0SOriE6/l8WkYeWuhQq8QsBjRi94mUIKLJ/VC3/Y/pj6VubQ==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: '>=16.6.0'
+
   '@types/d3-array@3.2.1':
     resolution: {integrity: sha512-Y2Jn2idRrLzUfAKV2LyRImR+y4oa2AntrgID95SHJxuMUrkNXmanDSed71sRNZysveJVt1hLLemQZIady0FpEg==}
 
@@ -358,12 +502,26 @@ packages:
   '@types/react@19.0.12':
     resolution: {integrity: sha512-V6Ar115dBDrjbtXSrS+/Oruobc+qVbbUxDFC1RSbRqLt5SYvxxyIDrSC85RWml54g+jfNeEMZhEj7wW07ONQhA==}
 
+  '@yr/monotone-cubic-spline@1.0.3':
+    resolution: {integrity: sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==}
+
+  apexcharts@4.5.0:
+    resolution: {integrity: sha512-E7ZkrVqPNBUWy/Rmg8DEIqHNBmElzICE/oxOX5Ekvs2ICQUOK/VkEkMH09JGJu+O/EA0NL31hxlmF+wrwrSLaQ==}
+
+  aria-hidden@1.2.4:
+    resolution: {integrity: sha512-y+CcFFwelSXpLZk/7fMB2mUbGtX9lKycf1MWJ7CaTIERyitVlyQx6C+sxcROU2BAJ24OiZyK+8wj2i8AlBoS3A==}
+    engines: {node: '>=10'}
+
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
     engines: {node: '>=10.16.0'}
 
   caniuse-lite@1.0.30001707:
     resolution: {integrity: sha512-3qtRjw/HQSMlDWf+X79N206fepf4SOOU6SQLMaq/0KkZLmSjPxAkBOQQ+FxbHKfHmYLZFfdWsO3KA90ceHPSnw==}
+
+  chart.js@4.4.8:
+    resolution: {integrity: sha512-IkGZlVpXP+83QpMm4uxEiGqSI7jFizwVtF3+n5Pc3k7sMO+tkd0qxh2OzLhenM0K80xtmAONWGBn082EiBQSDA==}
+    engines: {pnpm: '>=8'}
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
@@ -432,6 +590,12 @@ packages:
   d3-timer@3.0.1:
     resolution: {integrity: sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==}
     engines: {node: '>=12'}
+
+  date-fns@3.6.0:
+    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   decimal.js-light@2.5.1:
     resolution: {integrity: sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==}
@@ -621,6 +785,24 @@ packages:
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
+  react-apexcharts@1.7.0:
+    resolution: {integrity: sha512-03oScKJyNLRf0Oe+ihJxFZliBQM9vW3UWwomVn4YVRTN1jsIR58dLWt0v1sb8RwJVHDMbeHiKQueM0KGpn7nOA==}
+    peerDependencies:
+      apexcharts: '>=4.0.0'
+      react: '>=0.13'
+
+  react-chartjs-2@5.3.0:
+    resolution: {integrity: sha512-UfZZFnDsERI3c3CZGxzvNJd02SHjaSJ8kgW1djn65H1KK8rehwTjyrRKOG3VTMG8wtHZ5rgAO5oTHtHi9GCCmw==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  react-day-picker@8.10.1:
+    resolution: {integrity: sha512-TMx7fNbhLk15eqcMt+7Z7S2KF7mfTId/XJDjKE8f+IUcFn0l08/kI4FiYTL/0yuOLmEcbR4Fwe3GJf/NiiMnPA==}
+    peerDependencies:
+      date-fns: ^2.28.0 || ^3.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+
   react-dom@19.1.0:
     resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
     peerDependencies:
@@ -643,6 +825,12 @@ packages:
     peerDependencies:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
+
+  react-transition-state@2.3.1:
+    resolution: {integrity: sha512-Z48el73x+7HUEM131dof9YpcQ5IlM4xB+pKWH/lX3FhxGfQaNTZa16zb7pWkC/y5btTZzXfCtglIJEGc57giOw==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
@@ -697,6 +885,15 @@ packages:
       babel-plugin-macros:
         optional: true
 
+  tabbable@6.2.0:
+    resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
+
+  tailwind-merge@2.6.0:
+    resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
+
+  tailwind-merge@3.0.2:
+    resolution: {integrity: sha512-l7z+OYZ7mu3DTqrL88RiKrKIqO3NcpEO8V/Od04bNpvk0kiIFndGEoqfuzvj4yuhRkHKjRkII2z+KS2HfPcSxw==}
+
   tailwindcss@4.0.17:
     resolution: {integrity: sha512-OErSiGzRa6rLiOvaipsDZvLMSpsBZ4ysB4f0VKGXUrjw2jfkJRd6kjRKV2+ZmTCNvwtvgdDam5D7w6WXsdLJZw==}
 
@@ -733,6 +930,54 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@floating-ui/core@1.6.9':
+    dependencies:
+      '@floating-ui/utils': 0.2.9
+
+  '@floating-ui/dom@1.6.13':
+    dependencies:
+      '@floating-ui/core': 1.6.9
+      '@floating-ui/utils': 0.2.9
+
+  '@floating-ui/react-dom@1.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@floating-ui/dom': 1.6.13
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@floating-ui/react-dom@2.1.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@floating-ui/dom': 1.6.13
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@floating-ui/react@0.19.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@floating-ui/react-dom': 1.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      aria-hidden: 1.2.4
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      tabbable: 6.2.0
+
+  '@floating-ui/react@0.26.28(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@floating-ui/react-dom': 2.1.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@floating-ui/utils': 0.2.9
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      tabbable: 6.2.0
+
+  '@floating-ui/utils@0.2.9': {}
+
+  '@headlessui/react@2.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@floating-ui/react': 0.26.28(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-aria/focus': 3.20.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-aria/interactions': 3.24.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@tanstack/react-virtual': 3.13.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
@@ -809,6 +1054,8 @@ snapshots:
   '@img/sharp-win32-x64@0.33.5':
     optional: true
 
+  '@kurkle/color@0.3.4': {}
+
   '@next/env@15.2.4': {}
 
   '@next/swc-darwin-arm64@15.2.4':
@@ -834,6 +1081,74 @@ snapshots:
 
   '@next/swc-win32-x64-msvc@15.2.4':
     optional: true
+
+  '@react-aria/focus@3.20.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@react-aria/interactions': 3.24.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-aria/utils': 3.28.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-types/shared': 3.28.0(react@19.1.0)
+      '@swc/helpers': 0.5.15
+      clsx: 2.1.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@react-aria/interactions@3.24.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@react-aria/ssr': 3.9.7(react@19.1.0)
+      '@react-aria/utils': 3.28.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-stately/flags': 3.1.0
+      '@react-types/shared': 3.28.0(react@19.1.0)
+      '@swc/helpers': 0.5.15
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@react-aria/ssr@3.9.7(react@19.1.0)':
+    dependencies:
+      '@swc/helpers': 0.5.15
+      react: 19.1.0
+
+  '@react-aria/utils@3.28.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@react-aria/ssr': 3.9.7(react@19.1.0)
+      '@react-stately/flags': 3.1.0
+      '@react-stately/utils': 3.10.5(react@19.1.0)
+      '@react-types/shared': 3.28.0(react@19.1.0)
+      '@swc/helpers': 0.5.15
+      clsx: 2.1.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@react-stately/flags@3.1.0':
+    dependencies:
+      '@swc/helpers': 0.5.15
+
+  '@react-stately/utils@3.10.5(react@19.1.0)':
+    dependencies:
+      '@swc/helpers': 0.5.15
+      react: 19.1.0
+
+  '@react-types/shared@3.28.0(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
+
+  '@svgdotjs/svg.draggable.js@3.0.6(@svgdotjs/svg.js@3.2.4)':
+    dependencies:
+      '@svgdotjs/svg.js': 3.2.4
+
+  '@svgdotjs/svg.filter.js@3.0.9':
+    dependencies:
+      '@svgdotjs/svg.js': 3.2.4
+
+  '@svgdotjs/svg.js@3.2.4': {}
+
+  '@svgdotjs/svg.resize.js@2.0.5(@svgdotjs/svg.js@3.2.4)(@svgdotjs/svg.select.js@4.0.2(@svgdotjs/svg.js@3.2.4))':
+    dependencies:
+      '@svgdotjs/svg.js': 3.2.4
+      '@svgdotjs/svg.select.js': 4.0.2(@svgdotjs/svg.js@3.2.4)
+
+  '@svgdotjs/svg.select.js@4.0.2(@svgdotjs/svg.js@3.2.4)':
+    dependencies:
+      '@svgdotjs/svg.js': 3.2.4
 
   '@swc/counter@0.1.3': {}
 
@@ -903,6 +1218,26 @@ snapshots:
       postcss: 8.5.3
       tailwindcss: 4.0.17
 
+  '@tanstack/react-virtual@3.13.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@tanstack/virtual-core': 3.13.5
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@tanstack/virtual-core@3.13.5': {}
+
+  '@tremor/react@3.18.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@floating-ui/react': 0.19.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@headlessui/react': 2.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      date-fns: 3.6.0
+      react: 19.1.0
+      react-day-picker: 8.10.1(date-fns@3.6.0)(react@19.1.0)
+      react-dom: 19.1.0(react@19.1.0)
+      react-transition-state: 2.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      recharts: 2.15.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      tailwind-merge: 2.6.0
+
   '@types/d3-array@3.2.1': {}
 
   '@types/d3-color@3.1.3': {}
@@ -939,11 +1274,30 @@ snapshots:
     dependencies:
       csstype: 3.1.3
 
+  '@yr/monotone-cubic-spline@1.0.3': {}
+
+  apexcharts@4.5.0:
+    dependencies:
+      '@svgdotjs/svg.draggable.js': 3.0.6(@svgdotjs/svg.js@3.2.4)
+      '@svgdotjs/svg.filter.js': 3.0.9
+      '@svgdotjs/svg.js': 3.2.4
+      '@svgdotjs/svg.resize.js': 2.0.5(@svgdotjs/svg.js@3.2.4)(@svgdotjs/svg.select.js@4.0.2(@svgdotjs/svg.js@3.2.4))
+      '@svgdotjs/svg.select.js': 4.0.2(@svgdotjs/svg.js@3.2.4)
+      '@yr/monotone-cubic-spline': 1.0.3
+
+  aria-hidden@1.2.4:
+    dependencies:
+      tslib: 2.8.1
+
   busboy@1.6.0:
     dependencies:
       streamsearch: 1.1.0
 
   caniuse-lite@1.0.30001707: {}
+
+  chart.js@4.4.8:
+    dependencies:
+      '@kurkle/color': 0.3.4
 
   client-only@0.0.1: {}
 
@@ -1008,6 +1362,10 @@ snapshots:
       d3-array: 3.2.4
 
   d3-timer@3.0.1: {}
+
+  date-fns@3.6.0: {}
+
+  date-fns@4.1.0: {}
 
   decimal.js-light@2.5.1: {}
 
@@ -1162,6 +1520,22 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
+  react-apexcharts@1.7.0(apexcharts@4.5.0)(react@19.1.0):
+    dependencies:
+      apexcharts: 4.5.0
+      prop-types: 15.8.1
+      react: 19.1.0
+
+  react-chartjs-2@5.3.0(chart.js@4.4.8)(react@19.1.0):
+    dependencies:
+      chart.js: 4.4.8
+      react: 19.1.0
+
+  react-day-picker@8.10.1(date-fns@3.6.0)(react@19.1.0):
+    dependencies:
+      date-fns: 3.6.0
+      react: 19.1.0
+
   react-dom@19.1.0(react@19.1.0):
     dependencies:
       react: 19.1.0
@@ -1185,6 +1559,11 @@ snapshots:
       dom-helpers: 5.2.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  react-transition-state@2.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
@@ -1254,6 +1633,12 @@ snapshots:
     dependencies:
       client-only: 0.0.1
       react: 19.1.0
+
+  tabbable@6.2.0: {}
+
+  tailwind-merge@2.6.0: {}
+
+  tailwind-merge@3.0.2: {}
 
   tailwindcss@4.0.17: {}
 
