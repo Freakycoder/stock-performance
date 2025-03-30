@@ -5,14 +5,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Search, TrendingUp, TrendingDown, ExternalLink } from "lucide-react";
-import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
+import { Search, TrendingUp, TrendingDown, ExternalLink, Filter, Layers, ArrowUpDown } from "lucide-react";
+import { cn, formatCurrency, formatPercentage, formatCompactNumber } from "@/lib/utils";
 import { stocks, marketIndexes } from "@/lib/stockData";
 import { AreaChart } from "@tremor/react";
 import Link from "next/link";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function MarketPage() {
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<"name" | "price" | "change" | "marketCap">("change");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  
+  // Toggle sort direction or change sort field
+  const handleSort = (field: "name" | "price" | "change" | "marketCap") => {
+    if (sortBy === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(field);
+      setSortDirection("desc");
+    }
+  };
   
   // Filter stocks based on search
   const filteredStocks = stocks.filter((stock) => {
@@ -22,6 +35,28 @@ export default function MarketPage() {
       stock.symbol.toLowerCase().includes(searchTerm) ||
       stock.sector.toLowerCase().includes(searchTerm)
     );
+  });
+  
+  // Sort stocks based on selected field and direction
+  const sortedStocks = [...filteredStocks].sort((a, b) => {
+    let comparison = 0;
+    
+    switch (sortBy) {
+      case "name":
+        comparison = a.name.localeCompare(b.name);
+        break;
+      case "price":
+        comparison = a.price - b.price;
+        break;
+      case "change":
+        comparison = a.changePercent - b.changePercent;
+        break;
+      case "marketCap":
+        comparison = a.marketCap - b.marketCap;
+        break;
+    }
+    
+    return sortDirection === "asc" ? comparison : -comparison;
   });
   
   // Format stock data for charts
@@ -48,19 +83,19 @@ export default function MarketPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.1 }}
             >
-              <Card className="shadow-sm border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
-                <CardContent className="p-5">
+              <Card className="overflow-hidden border-border bg-card shadow-sm h-full">
+                <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{index.name}</p>
-                      <p className="text-3xl font-bold mt-1 text-gray-900 dark:text-white">{index.value.toLocaleString()}</p>
+                      <h3 className="text-base font-medium text-muted-foreground">{index.name}</h3>
+                      <p className="text-3xl font-bold mt-1">{index.value.toLocaleString()}</p>
                       <div className={cn(
-                        "flex items-center gap-1 mt-2 text-sm font-medium px-2 py-1 rounded-full w-fit",
+                        "flex items-center gap-1 mt-2 text-sm font-medium px-2 py-1 rounded-lg w-fit",
                         index.changePercent >= 0 
-                          ? "text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/40" 
-                          : "text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/40"
+                          ? "text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30" 
+                          : "text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-900/30"
                       )}>
-                        {index.changePercent >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                        {index.changePercent >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                         {index.changePercent >= 0 ? "+" : ""}
                         {index.changePercent.toFixed(2)}%
                       </div>
@@ -81,95 +116,182 @@ export default function MarketPage() {
         </div>
         
         {/* Stock List */}
-        <Card className="shadow-sm border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
-          <CardHeader className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/60 px-6">
+        <Card className="shadow-sm border-border bg-card overflow-hidden">
+          <CardHeader className="p-6 border-b border-border bg-muted/20">
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-              <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">All Stocks</CardTitle>
-              <div className="relative w-full sm:w-auto">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Search stocks..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 h-10 w-full sm:w-[260px] border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
-                />
+              <CardTitle className="text-xl font-bold">All Stocks</CardTitle>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search stocks..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="pl-9 h-10 w-full sm:w-[260px] rounded-xl"
+                  />
+                </div>
+                <Tabs defaultValue="all" className="w-full sm:w-auto">
+                  <TabsList className="h-10 bg-muted">
+                    <TabsTrigger value="all" className="px-3 rounded-md">All</TabsTrigger>
+                    <TabsTrigger value="technology" className="px-3 rounded-md">Technology</TabsTrigger>
+                    <TabsTrigger value="finance" className="px-3 rounded-md">Finance</TabsTrigger>
+                    <TabsTrigger value="consumer" className="px-3 rounded-md">Consumer</TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="divide-y divide-gray-200 dark:divide-gray-800">
-              {filteredStocks.map((stock, i) => (
-                <motion.div
-                  key={stock.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2, delay: i * 0.03 }}
-                  className="flex items-center p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="flex flex-1 items-center">
-                    <div 
-                      className="flex h-12 w-12 items-center justify-center rounded-full mr-4"
-                      style={{ backgroundColor: `${stock.color}15` }}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-muted/30 text-left text-sm">
+                    <th 
+                      className="px-6 py-4 font-medium text-muted-foreground cursor-pointer hover:text-foreground"
+                      onClick={() => handleSort("name")}
                     >
-                      <span className="text-sm font-semibold" style={{ color: stock.color }}>
-                        {stock.symbol.slice(0, 2)}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">{stock.name}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs font-medium text-gray-600 dark:text-gray-300">{stock.symbol}</span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded-md">{stock.sector}</span>
+                      <div className="flex items-center gap-1">
+                        <span>Stock</span>
+                        {sortBy === "name" && (
+                          <ArrowUpDown className="h-3 w-3" />
+                        )}
                       </div>
-                    </div>
-                  </div>
+                    </th>
+                    <th 
+                      className="px-6 py-4 font-medium text-muted-foreground text-right cursor-pointer hover:text-foreground"
+                      onClick={() => handleSort("price")}
+                    >
+                      <div className="flex items-center justify-end gap-1">
+                        <span>Price</span>
+                        {sortBy === "price" && (
+                          <ArrowUpDown className="h-3 w-3" />
+                        )}
+                      </div>
+                    </th>
+                    <th 
+                      className="px-6 py-4 font-medium text-muted-foreground text-right cursor-pointer hover:text-foreground"
+                      onClick={() => handleSort("change")}
+                    >
+                      <div className="flex items-center justify-end gap-1">
+                        <span>Change</span>
+                        {sortBy === "change" && (
+                          <ArrowUpDown className="h-3 w-3" />
+                        )}
+                      </div>
+                    </th>
+                    <th 
+                      className="px-6 py-4 font-medium text-muted-foreground text-right cursor-pointer hover:text-foreground hidden md:table-cell"
+                      onClick={() => handleSort("marketCap")}
+                    >
+                      <div className="flex items-center justify-end gap-1">
+                        <span>Market Cap</span>
+                        {sortBy === "marketCap" && (
+                          <ArrowUpDown className="h-3 w-3" />
+                        )}
+                      </div>
+                    </th>
+                    <th className="px-6 py-4 font-medium text-muted-foreground hidden lg:table-cell">
+                      <span>Chart</span>
+                    </th>
+                    <th className="px-6 py-4 font-medium text-muted-foreground text-right">
+                      <span>Action</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {sortedStocks.map((stock, i) => (
+                    <motion.tr
+                      key={stock.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2, delay: i * 0.03 }}
+                      className="hover:bg-muted/20 transition-colors group"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="flex h-10 w-10 items-center justify-center rounded-xl shrink-0" 
+                            style={{ backgroundColor: `${stock.color}15` }}
+                          >
+                            <span className="text-sm font-bold" style={{ color: stock.color }}>
+                              {stock.symbol.slice(0, 2)}
+                            </span>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-medium line-clamp-1">{stock.name}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-xs font-medium text-muted-foreground">{stock.symbol}</span>
+                              <span className="text-xs px-1.5 py-0.5 bg-muted rounded text-muted-foreground">{stock.sector}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      <td className="px-6 py-4 text-right">
+                        <p className="font-bold">{formatCurrency(stock.price)}</p>
+                      </td>
+                      
+                      <td className="px-6 py-4 text-right">
+                        <div className={cn(
+                          "flex items-center justify-end gap-1 text-sm font-medium px-2 py-1 rounded-lg w-fit ml-auto",
+                          stock.changePercent >= 0 
+                            ? "text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30" 
+                            : "text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-900/30"
+                        )}>
+                          {stock.changePercent >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                          {stock.changePercent >= 0 ? "+" : ""}
+                          {formatPercentage(stock.changePercent)}
+                        </div>
+                      </td>
+                      
+                      <td className="px-6 py-4 text-right hidden md:table-cell font-medium">
+                        {formatCompactNumber(stock.marketCap)}
+                      </td>
+                      
+                      <td className="px-6 py-4 hidden lg:table-cell">
+                        <div className="w-32 h-10">
+                          <AreaChart
+                            data={formatStockChart(stock.historicalData)}
+                            index="date"
+                            categories={["Price"]}
+                            colors={[stock.changePercent >= 0 ? "emerald" : "rose"]}
+                            showLegend={false}
+                            showXAxis={false}
+                            showYAxis={false}
+                            showGridLines={false}
+                            showTooltip={false}
+                            autoMinValue={true}
+                            curveType="monotone"
+                            className="h-10"
+                          />
+                        </div>
+                      </td>
+                      
+                      <td className="px-6 py-4 text-right">
+                        <Link href={`/market/${stock.id}`}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                          >
+                            <span className="mr-1">View</span>
+                            <ExternalLink className="h-3 w-3" />
+                          </Button>
+                        </Link>
+                      </td>
+                    </motion.tr>
+                  ))}
                   
-                  <div className="hidden md:block w-32 h-16">
-                    <AreaChart
-                      data={formatStockChart(stock.historicalData)}
-                      index="date"
-                      categories={["Price"]}
-                      colors={[stock.changePercent >= 0 ? "#10b981" : "#ef4444"]}
-                      showLegend={false}
-                      showXAxis={false}
-                      showYAxis={false}
-                      showGridLines={false}
-                      showTooltip={false}
-                      autoMinValue={true}
-                      curveType="monotone"
-                      className="h-16"
-                    />
-                  </div>
-                  
-                  <div className="ml-4 md:ml-6 text-right">
-                    <p className="font-medium text-gray-900 dark:text-white">{formatCurrency(stock.price)}</p>
-                    // src/pages/market.tsx (continued)
-                    <div className={cn(
-                      "flex items-center justify-end gap-1 text-xs font-medium mt-1 px-2 py-0.5 rounded-full w-fit ml-auto",
-                      stock.changePercent >= 0 
-                        ? "text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/40" 
-                        : "text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/40"
-                    )}>
-                      {stock.changePercent >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                      {stock.changePercent >= 0 ? "+" : ""}
-                      {formatPercentage(stock.changePercent)}
-                    </div>
-                  </div>
-                  
-                  <Button variant="ghost" size="icon" className="ml-4 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" asChild>
-                    <Link href={`/market/${stock.id}`}>
-                      <ExternalLink className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                </motion.div>
-              ))}
-              
-              {filteredStocks.length === 0 && (
-                <div className="py-12 text-center text-gray-500 dark:text-gray-400">
-                  No stocks found matching "{search}".
-                </div>
-              )}
+                  {sortedStocks.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
+                        No stocks found matching "{search}".
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </CardContent>
         </Card>

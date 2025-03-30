@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { calculateSectorAllocation } from "@/lib/stockData";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
-import { DonutChart, Legend } from "@tremor/react";
+import { DonutChart } from "@tremor/react";
+import { Sparkles } from "lucide-react";
 
 export function PortfolioAllocation() {
   const sectorAllocation = calculateSectorAllocation();
@@ -15,30 +16,33 @@ export function PortfolioAllocation() {
     value: item.percentage,
   }));
 
-  // The valueFormatter function changes how values are displayed in the chart
-  const valueFormatter = (value: number) => formatPercentage(value);
+  // Value formatter function for the chart
+  const valueFormatter = (value: number) => `${value.toFixed(1)}%`;
 
-  // Define sector colors
+  // Define sector colors - vibrant and visually distinct
   const customColors = [
-    "#3b82f6", // blue
-    "#8b5cf6", // purple
-    "#ec4899", // pink
-    "#f97316", // orange
-    "#eab308", // yellow
-    "#22c55e", // green
-    "#14b8a6", // teal
+    "#4f46e5", // indigo-600
+    "#8b5cf6", // violet-500
+    "#ec4899", // pink-500
+    "#14b8a6", // teal-500
+    "#f59e0b", // amber-500
+    "#10b981", // emerald-500
+    "#6366f1", // indigo-500
   ];
 
   return (
-    <Card>
-      <CardHeader className="bg-blue-50 px-6 py-5 dark:bg-blue-900/20">
-        <CardTitle className="text-lg font-semibold">Portfolio Allocation</CardTitle>
+    <Card className="overflow-hidden bg-card border-border shadow-sm h-full">
+      <CardHeader className="p-6 border-b border-border bg-muted/20">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-xl font-bold">Portfolio Allocation</CardTitle>
+          <Sparkles className="h-5 w-5 text-primary" />
+        </div>
       </CardHeader>
       <CardContent className="p-6">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
           className="mb-6"
         >
           <DonutChart
@@ -48,37 +52,31 @@ export function PortfolioAllocation() {
             valueFormatter={valueFormatter}
             colors={customColors}
             className="h-64 mt-4"
+            showLabel={false}
+            showAnimation={true}
           />
         </motion.div>
         
-        <div className="mb-4">
-          <Legend
-            categories={chartData.map(item => item.name)}
-            colors={customColors}
-            className="mt-6"
-          />
-        </div>
-        
-        <div className="mt-6 space-y-2">
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Allocation Details</p>
+        <div className="mt-8 space-y-2">
+          <h3 className="text-base font-medium mb-3">Allocation Details</h3>
           {sectorAllocation.map((sector, i) => (
             <motion.div
               key={sector.sector}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
-              className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-2"
+              className="flex items-center justify-between py-2 border-b border-border last:border-none"
             >
               <div className="flex items-center">
                 <div 
-                  className="h-3 w-3 rounded-full mr-2" 
+                  className="h-3 w-3 rounded-full mr-3" 
                   style={{ backgroundColor: customColors[i % customColors.length] }}
                 />
-                <span className="text-sm font-medium">{sector.sector}</span>
+                <span className="text-base font-medium">{sector.sector}</span>
               </div>
               <div className="flex gap-6">
-                <span className="text-sm text-gray-500 dark:text-gray-400">{formatCurrency(sector.value)}</span>
-                <span className="text-sm font-medium w-16 text-right">{formatPercentage(sector.percentage)}</span>
+                <span className="text-sm text-muted-foreground w-24 text-right">{formatCurrency(sector.value)}</span>
+                <span className="text-sm font-medium w-16 text-right bg-muted/40 px-2 py-0.5 rounded">{formatPercentage(sector.percentage)}</span>
               </div>
             </motion.div>
           ))}
