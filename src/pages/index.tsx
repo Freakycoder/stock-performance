@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 
 export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
-  const [userName, setUserName] = useState("John");
+  const [userName, setUserName] = useState("Ishaan");
   const router = useRouter()
   
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function Dashboard() {
               <Calendar className="h-5 w-5 text-gray-600" />
             </div>
            
-            <Button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+            <Button onClick={()=> router.push('/addfunds')} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
               <span>Add Funds</span>
             </Button>
           </motion.div>
