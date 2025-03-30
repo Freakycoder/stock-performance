@@ -10,6 +10,7 @@ interface StatCardProps {
   changeText?: string;
   icon: LucideIcon;
   iconColor?: string;
+  iconBgColor?: string;
   animationDelay?: number;
 }
 
@@ -19,7 +20,8 @@ export function StatCard({
   change, 
   changeText,
   icon: Icon,
-  iconColor = "bg-primary",
+  iconColor = "text-blue-600",
+  iconBgColor = "bg-blue-100",
   animationDelay = 0 
 }: StatCardProps) {
   const isPositiveChange = typeof change === 'number' ? change >= 0 : change && !change.startsWith('-');
@@ -29,28 +31,31 @@ export function StatCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: animationDelay }}
+      whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
-      <div className="relative overflow-hidden rounded-2xl bg-card p-6 shadow-sm border border-border h-full">
-        {/* Decorative background element */}
-        <div className="absolute top-0 right-0 h-24 w-24 translate-x-6 -translate-y-6 opacity-10">
-          <div className={`h-full w-full rounded-full ${iconColor}`}></div>
-        </div>
+      <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm border border-gray-100 h-full transition-all duration-200 hover:shadow-md">
+        {/* Gradient background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white opacity-80"></div>
         
-        <div className="flex items-center gap-4">
-          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconColor} text-white`}>
-            <Icon className="h-6 w-6" />
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 h-24 w-24 -translate-y-8 translate-x-8 opacity-[0.07] rounded-full bg-blue-600 blur-2xl"></div>
+        <div className="absolute bottom-0 left-0 h-24 w-24 translate-y-6 -translate-x-6 opacity-[0.03] rounded-full bg-blue-600 blur-xl"></div>
+        
+        <div className="relative flex items-center gap-4">
+          <div className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-xl", iconBgColor)}>
+            <Icon className={cn("h-6 w-6", iconColor)} />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="mt-1 truncate text-2xl font-bold">{value}</p>
+            <p className="text-sm font-medium text-gray-500">{title}</p>
+            <p className="mt-1 truncate text-2xl font-bold text-gray-800">{value}</p>
             {change && (
-              <div className="flex items-center mt-1">
+              <div className="flex items-center mt-1.5">
                 <span 
                   className={cn(
-                    "flex items-center text-xs font-medium gap-0.5",
+                    "flex items-center text-xs font-medium gap-0.5 rounded-full px-2 py-0.5",
                     isPositiveChange 
-                      ? "text-green-600 dark:text-green-400" 
-                      : "text-red-600 dark:text-red-400"
+                      ? "text-green-700 bg-green-50" 
+                      : "text-red-700 bg-red-50"
                   )}
                 >
                   {isPositiveChange ? (
@@ -61,12 +66,12 @@ export function StatCard({
                   {typeof change === 'string' ? change : `${Math.abs(change).toFixed(2)}%`}
                 </span>
                 {changeText && (
-                  <span className="text-xs text-muted-foreground ml-1">{changeText}</span>
+                  <span className="text-xs text-gray-500 ml-1.5">{changeText}</span>
                 )}
               </div>
             )}
             {!change && changeText && (
-              <p className="text-xs text-muted-foreground mt-1">{changeText}</p>
+              <p className="text-xs text-gray-500 mt-1">{changeText}</p>
             )}
           </div>
         </div>

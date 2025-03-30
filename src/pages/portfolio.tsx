@@ -7,13 +7,16 @@ import { DonutChart, BarChart, LineChart } from "@tremor/react";
 import { motion } from "framer-motion";
 import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
 import { calculatePortfolioValue, calculateSectorAllocation } from "@/lib/stockData";
-import { ArrowUp, ArrowDown, TrendingUp, Wallet, PieChart, Calendar, Filter, Download, Share2 } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, PieChart, BarChart3, Calendar, Filter, Download, Share2, Plus, ChevronRight, Sparkles, AlertTriangle, Info, Settings, Edit3, Eye, ExternalLink, Search, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function PortfolioPage() {
   const portfolio = calculatePortfolioValue();
   const sectorAllocation = calculateSectorAllocation();
+  const [activeTab, setActiveTab] = useState("overview");
+  const [timeRange, setTimeRange] = useState("YTD");
   
   // Format data for charts
   const allocationData = sectorAllocation.map(item => ({
@@ -58,37 +61,94 @@ export default function PortfolioPage() {
 
   return (
     <DashboardLayout title="Portfolio">
-      <div className="space-y-6">
-        <Card className="shadow-sm overflow-hidden bg-card border-border">
-          <CardHeader className="border-b border-border bg-muted/20 p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <CardTitle className="text-xl font-bold">Portfolio Overview</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">Track your investment performance and asset allocation</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="rounded-lg h-9 gap-1">
-                  <Download className="h-4 w-4" />
-                  Export
-                </Button>
-                <Button variant="outline" size="sm" className="rounded-lg h-9 gap-1">
-                  <Share2 className="h-4 w-4" />
-                  Share
-                </Button>
+      <div className="space-y-8">
+        {/* Header with portfolio summary and time range selector */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-2xl font-bold text-gray-800">Investment Portfolio</h1>
+            <div className="flex items-center mt-1">
+              <p className="text-gray-500">Total value:</p>
+              <p className="ml-2 text-lg font-bold text-gray-800">{formatCurrency(portfolio.totalValue)}</p>
+              <div className={cn(
+                "flex items-center gap-0.5 ml-3 text-sm font-medium",
+                portfolio.totalGainLossPercent >= 0 
+                  ? "text-green-600" 
+                  : "text-red-600"
+              )}>
+                {portfolio.totalGainLossPercent >= 0 ? (
+                  <ArrowUp className="h-4 w-4" />
+                ) : (
+                  <ArrowDown className="h-4 w-4" />
+                )}
+                {portfolio.totalGainLossPercent >= 0 ? "+" : ""}
+                {formatPercentage(Math.abs(portfolio.totalGainLossPercent))}
               </div>
             </div>
-          </CardHeader>
+          </motion.div>
           
-          <Tabs defaultValue="overview" className="w-full">
-            <div className="px-6 pt-4 border-b border-border">
-              <TabsList className="h-10 bg-muted">
-                <TabsTrigger value="overview" className="px-4 rounded-lg">Overview</TabsTrigger>
-                <TabsTrigger value="performance" className="px-4 rounded-lg">Performance</TabsTrigger>
-                <TabsTrigger value="holdings" className="px-4 rounded-lg">Holdings</TabsTrigger>
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex items-center gap-3 flex-wrap"
+          >
+            <div className="relative inline-block text-left">
+              <Button 
+                variant="outline" 
+                className="rounded-lg border-gray-200 text-gray-700 flex items-center gap-1.5"
+              >
+                <Calendar className="h-4 w-4 text-gray-500" />
+                <span>{timeRange}</span>
+                <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </Button>
+            </div>
+            
+            <Button 
+              variant="outline" 
+              className="rounded-lg border-gray-200 text-gray-700 flex items-center gap-1.5"
+            >
+              <Download className="h-4 w-4 text-gray-500" />
+              <span className="hidden sm:inline">Export</span>
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="rounded-lg border-gray-200 text-gray-700 flex items-center gap-1.5"
+            >
+              <Share2 className="h-4 w-4 text-gray-500" />
+              <span className="hidden sm:inline">Share</span>
+            </Button>
+            
+            <Button 
+              variant="default"
+              className="rounded-lg bg-blue-600 text-white hover:bg-blue-700 flex items-center gap-1.5"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Add Investment</span>
+            </Button>
+          </motion.div>
+        </div>
+        
+        {/* Main analytics content with tabs */}
+        <Card className="shadow-sm border-gray-200 bg-white overflow-hidden">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="px-6 pt-6 border-b border-gray-200">
+              <TabsList className="h-10 bg-gray-100 w-full sm:w-auto rounded-lg">
+                <TabsTrigger value="overview" className="rounded-md px-4">Overview</TabsTrigger>
+                <TabsTrigger value="performance" className="rounded-md px-4">Performance</TabsTrigger>
+                <TabsTrigger value="holdings" className="rounded-md px-4">Holdings</TabsTrigger>
+                <TabsTrigger value="transactions" className="rounded-md px-4">Transactions</TabsTrigger>
               </TabsList>
             </div>
           
-            <TabsContent value="overview" className="p-6">
+            {/* Overview Tab */}
+            <TabsContent value="overview" className="p-6 space-y-6">
               {/* Stats Row */}
               <div className="grid gap-6 md:grid-cols-3 mb-6">
                 <motion.div
@@ -96,23 +156,23 @@ export default function PortfolioPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="relative rounded-2xl p-6 border border-border overflow-hidden bg-gradient-to-br from-white to-muted dark:from-muted/20 dark:to-black/20">
+                  <div className="relative rounded-2xl p-6 border border-gray-200 overflow-hidden bg-gradient-to-br from-white to-gray-50">
                     <div className="absolute top-0 right-0 h-24 w-24 translate-x-6 -translate-y-6 opacity-10">
-                      <div className="h-full w-full rounded-full bg-primary"></div>
+                      <div className="h-full w-full rounded-full bg-blue-600"></div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white">
                         <Wallet className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Total Value</p>
-                        <p className="text-2xl font-bold mt-1">{formatCurrency(portfolio.totalValue)}</p>
+                        <p className="text-sm font-medium text-gray-500">Total Value</p>
+                        <p className="text-2xl font-bold mt-1 text-gray-800">{formatCurrency(portfolio.totalValue)}</p>
                         <div className="flex items-center mt-1">
                           <span className={cn(
                             "flex items-center gap-1 text-sm font-medium",
                             portfolio.totalGainLossPercent >= 0 
-                              ? "text-green-600 dark:text-green-400" 
-                              : "text-red-600 dark:text-red-400"
+                              ? "text-green-600" 
+                              : "text-red-600"
                           )}>
                             {portfolio.totalGainLossPercent >= 0 ? (
                               <ArrowUp className="h-4 w-4" />
@@ -121,7 +181,7 @@ export default function PortfolioPage() {
                             )}
                             {formatPercentage(Math.abs(portfolio.totalGainLossPercent))}
                           </span>
-                          <span className="text-xs text-muted-foreground ml-1">all time</span>
+                          <span className="text-xs text-gray-500 ml-1">all time</span>
                         </div>
                       </div>
                     </div>
@@ -133,21 +193,22 @@ export default function PortfolioPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 }}
                 >
-                  <div className="relative rounded-2xl p-6 border border-border overflow-hidden bg-gradient-to-br from-white to-muted dark:from-muted/20 dark:to-black/20">
+                  <div className="relative rounded-2xl p-6 border border-gray-200 overflow-hidden bg-gradient-to-br from-white to-gray-50">
                     <div className="absolute top-0 right-0 h-24 w-24 translate-x-6 -translate-y-6 opacity-10">
-                      <div className="h-full w-full rounded-full bg-green-500"></div>
+                      <div className="h-full w-full rounded-full bg-green-600"></div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500 text-white">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-600 text-white">
                         <TrendingUp className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Total Gain/Loss</p>
-                        <p className="text-2xl font-bold mt-1">{formatCurrency(portfolio.totalGainLoss)}</p>
+                        <p className="text-sm font-medium text-gray-500">Total Gain/Loss</p>
+                        <p className="text-2xl font-bold mt-1 text-gray-800">{formatCurrency(portfolio.totalGainLoss)}</p>
                         <div className="flex items-center mt-1">
                           <Badge 
                             variant={portfolio.totalGainLossPercent >= 0 ? "success" : "destructive"}
-                            className="flex items-center gap-1"
+                            className="flex items-center gap-1" 
+                            rounded="full"
                           >
                             {formatCurrency(portfolio.totalGainLoss)}
                           </Badge>
@@ -162,21 +223,21 @@ export default function PortfolioPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
                 >
-                  <div className="relative rounded-2xl p-6 border border-border overflow-hidden bg-gradient-to-br from-white to-muted dark:from-muted/20 dark:to-black/20">
+                  <div className="relative rounded-2xl p-6 border border-gray-200 overflow-hidden bg-gradient-to-br from-white to-gray-50">
                     <div className="absolute top-0 right-0 h-24 w-24 translate-x-6 -translate-y-6 opacity-10">
-                      <div className="h-full w-full rounded-full bg-amber-500"></div>
+                      <div className="h-full w-full rounded-full bg-indigo-600"></div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500 text-white">
-                        <Calendar className="h-6 w-6" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white">
+                        <BarChart3 className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Cost Basis</p>
-                        <p className="text-2xl font-bold mt-1">{formatCurrency(portfolio.totalCost)}</p>
+                        <p className="text-sm font-medium text-gray-500">Annual Return</p>
+                        <p className="text-2xl font-bold mt-1 text-gray-800">+18.4%</p>
                         <div className="flex items-center mt-1">
-                          <span className="text-sm text-muted-foreground">
-                            {portfolio.holdings.length} stocks in portfolio
-                          </span>
+                          <Badge variant="success" rounded="full">
+                            +3.2% vs market
+                          </Badge>
                         </div>
                       </div>
                     </div>
@@ -192,9 +253,17 @@ export default function PortfolioPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.3 }}
                 >
-                  <Card className="border-border overflow-hidden h-full">
-                    <CardHeader className="p-4 border-b border-border">
-                      <CardTitle className="text-lg font-medium">Sector Allocation</CardTitle>
+                  <Card className="border-gray-200 overflow-hidden h-full shadow-sm">
+                    <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <PieChart className="h-5 w-5 text-indigo-600" />
+                          <CardTitle className="text-lg font-medium text-gray-800">Sector Allocation</CardTitle>
+                        </div>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full">
+                          <Settings className="h-4 w-4 text-gray-500" />
+                        </Button>
+                      </div>
                     </CardHeader>
                     <CardContent className="p-6">
                       <DonutChart
@@ -209,20 +278,27 @@ export default function PortfolioPage() {
                       />
                       
                       <div className="mt-6 space-y-2">
-                        {sectorAllocation.map((sector, i) => (
-                          <div key={sector.sector} className="flex items-center justify-between py-2 border-b border-border last:border-none">
+                        {sectorAllocation.slice(0, 4).map((sector, i) => (
+                          <div key={sector.sector} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-none">
                             <div className="flex items-center">
                               <div 
                                 className="h-3 w-3 rounded-full mr-3" 
                                 style={{ backgroundColor: customColors[i % customColors.length] }}
                               />
-                              <span className="text-sm font-medium">{sector.sector}</span>
+                              <span className="text-sm font-medium text-gray-700">{sector.sector}</span>
                             </div>
                             <Badge variant="outline" className="font-medium">
                               {formatPercentage(sector.percentage)}
                             </Badge>
                           </div>
                         ))}
+                        
+                        {sectorAllocation.length > 4 && (
+                          <Button variant="ghost" className="w-full text-blue-600 hover:text-blue-700 hover:bg-blue-50 gap-1 mt-2">
+                            <span>View All Sectors</span>
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -234,50 +310,55 @@ export default function PortfolioPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.4 }}
                 >
-                  <Card className="border-border overflow-hidden h-full">
-                    <CardHeader className="p-4 border-b border-border">
-                      <CardTitle className="text-lg font-medium">Top Holdings</CardTitle>
+                  <Card className="border-gray-200 overflow-hidden h-full shadow-sm">
+                    <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <BarChart3 className="h-5 w-5 text-blue-600" />
+                          <CardTitle className="text-lg font-medium text-gray-800">Top Holdings</CardTitle>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs border-gray-200 text-gray-600 rounded-lg flex items-center gap-1.5"
+                        >
+                          <Filter className="h-3.5 w-3.5" />
+                          Filter
+                        </Button>
+                      </div>
                     </CardHeader>
                     <CardContent className="p-6">
-                      <BarChart
-                        data={holdingsData}
-                        index="name"
-                        categories={["Value"]}
-                        colors={["primary"]}
-                        valueFormatter={(value) => formatCurrency(value)}
-                        showLegend={false}
-                        showGridLines={false}
-                        showAnimation={true}
-                        className="h-64"
-                      />
-                      
-                      <div className="mt-6 space-y-2">
+                      <div className="space-y-4">
                         {portfolio.holdings
                           .sort((a, b) => b.currentValue - a.currentValue)
                           .slice(0, 5)
                           .map((holding, i) => (
-                            <div key={holding.stockId} className="flex items-center justify-between py-2 border-b border-border last:border-none">
+                            <div key={holding.stockId} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-none">
                               <div className="flex items-center">
                                 <div 
-                                  className="h-8 w-8 rounded-lg flex items-center justify-center mr-3"
-                                  style={{ backgroundColor: `${holding.stock.color}20` }}
+                                  className="h-9 w-9 rounded-lg flex items-center justify-center mr-3 shadow-sm"
+                                  style={{ backgroundColor: `${holding.stock.color}15` }}
                                 >
                                   <span className="text-xs font-bold" style={{ color: holding.stock.color }}>
                                     {holding.stock.symbol.slice(0, 2)}
                                   </span>
                                 </div>
                                 <div>
-                                  <p className="font-medium">{holding.stock.name}</p>
-                                  <p className="text-xs text-muted-foreground">{holding.shares} shares</p>
+                                  <p className="font-medium text-gray-800">{holding.stock.name}</p>
+                                  <div className="flex items-center gap-2 mt-0.5">
+                                    <p className="text-xs text-gray-500">{holding.shares} shares</p>
+                                    <span className="h-1 w-1 rounded-full bg-gray-300"></span>
+                                    <p className="text-xs text-gray-500">Avg. {formatCurrency(holding.averageCost)}</p>
+                                  </div>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="font-medium">{formatCurrency(holding.currentValue)}</p>
+                                <p className="font-medium text-gray-800">{formatCurrency(holding.currentValue)}</p>
                                 <div className={cn(
-                                  "text-xs",
+                                  "text-xs mt-0.5",
                                   holding.gainLoss >= 0
-                                    ? "text-green-600 dark:text-green-400"
-                                    : "text-red-600 dark:text-red-400"
+                                    ? "text-green-600"
+                                    : "text-red-600"
                                 )}>
                                   {holding.gainLoss >= 0 ? "+" : ""}
                                   {formatPercentage(holding.gainLossPercent)}
@@ -286,22 +367,88 @@ export default function PortfolioPage() {
                             </div>
                           ))}
                       </div>
+                      
+                      <Button 
+                        variant="outline" 
+                        className="w-full mt-4 justify-center rounded-lg border-gray-200 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      >
+                        View All Holdings
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </Button>
                     </CardContent>
                   </Card>
                 </motion.div>
               </div>
+              
+              {/* Insight Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="border-gray-200 overflow-hidden shadow-sm bg-gradient-to-br from-amber-50 to-white">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-600 mt-1">
+                        <AlertTriangle className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-800 text-lg">Concentration Risk</h3>
+                        <p className="mt-1 text-gray-600">Your technology sector allocation is 35%, which represents high concentration risk.</p>
+                        <Button className="mt-4 bg-amber-600 hover:bg-amber-700 text-white rounded-lg">
+                          Diversify Portfolio
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-gray-200 overflow-hidden shadow-sm bg-gradient-to-br from-blue-50 to-white">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 mt-1">
+                        <Sparkles className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-800 text-lg">Opportunity Detected</h3>
+                        <p className="mt-1 text-gray-600">Market dip in healthcare sector presents buying opportunity for diversification.</p>
+                        <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                          Explore Opportunities
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-gray-200 overflow-hidden shadow-sm bg-gradient-to-br from-green-50 to-white">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 mt-1">
+                        <Info className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-800 text-lg">Performance Insight</h3>
+                        <p className="mt-1 text-gray-600">Your portfolio is outperforming the S&P 500 by 3.2% YTD, with lower volatility.</p>
+                        <Button className="mt-4 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+                          View Details
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
             
-            <TabsContent value="performance" className="p-6">
+            {/* Performance Tab */}
+            <TabsContent value="performance" className="p-6 space-y-6">
               <div className="space-y-6">
-                <Card className="border-border overflow-hidden">
-                  <CardHeader className="p-4 border-b border-border">
+                <Card className="border-gray-200 shadow-sm bg-white">
+                  <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg font-medium">Portfolio Performance</CardTitle>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="h-8 rounded-lg text-xs">YTD</Button>
-                        <Button variant="outline" size="sm" className="h-8 rounded-lg text-xs">1Y</Button>
-                        <Button variant="default" size="sm" className="h-8 rounded-lg text-xs">All Time</Button>
+                        <TrendingUp className="h-5 w-5 text-blue-600" />
+                        <CardTitle className="text-lg font-medium text-gray-800">Portfolio Performance</CardTitle>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="h-8 rounded-lg text-xs border-gray-200">YTD</Button>
+                        <Button variant="outline" size="sm" className="h-8 rounded-lg text-xs border-gray-200">1Y</Button>
+                        <Button variant="default" size="sm" className="h-8 rounded-lg text-xs bg-blue-600 text-white hover:bg-blue-700">All Time</Button>
                       </div>
                     </div>
                   </CardHeader>
@@ -311,66 +458,87 @@ export default function PortfolioPage() {
                         data={performanceData}
                         index="date"
                         categories={["Portfolio", "Benchmark"]}
-                        colors={["primary", "slate"]}
+                        colors={["blue", "gray"]}
                         valueFormatter={(value) => `${value.toFixed(1)}%`}
                         showLegend={true}
                         showAnimation={true}
                         className="h-80"
                       />
                     </div>
+                    
+                    <div className="mt-6 flex items-center justify-between p-4 rounded-xl bg-blue-50 border border-blue-100">
+                      <div className="flex items-start gap-3">
+                        <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+                        <div>
+                          <h3 className="font-medium text-gray-800">Outperforming the Market</h3>
+                          <p className="text-sm text-gray-600 mt-1">Your portfolio is outperforming the benchmark by 2.3% over the selected period.</p>
+                        </div>
+                      </div>
+                      <Button variant="outline" className="ml-4 border-blue-200 text-blue-600 hover:bg-blue-100 rounded-lg shrink-0">
+                        View Analysis
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
                 
-                <div className="grid gap-6 md:grid-cols-2">
-                  <Card className="border-border overflow-hidden">
-                    <CardHeader className="p-4 border-b border-border">
-                      <CardTitle className="text-lg font-medium">Monthly Returns (%)</CardTitle>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card className="border-gray-200 shadow-sm bg-white">
+                    <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
+                      <CardTitle className="text-lg font-medium text-gray-800">Monthly Returns (%)</CardTitle>
                     </CardHeader>
                     <CardContent className="p-6">
-                      <BarChart
-                        data={performanceData}
-                        index="date"
-                        categories={["Portfolio"]}
-                        colors={["primary"]}
-                        valueFormatter={(value) => `${value.toFixed(1)}%`}
-                        showLegend={false}
-                        showAnimation={true}
-                        className="h-64"
-                      />
+                      <div className="h-64">
+                        <BarChart
+                          data={performanceData}
+                          index="date"
+                          categories={["Portfolio"]}
+                          colors={["blue"]}
+                          valueFormatter={(value) => `${value.toFixed(1)}%`}
+                          showLegend={false}
+                          showAnimation={true}
+                          className="h-64"
+                        />
+                      </div>
                     </CardContent>
                   </Card>
                   
-                  <Card className="border-border overflow-hidden">
-                    <CardHeader className="p-4 border-b border-border">
-                      <CardTitle className="text-lg font-medium">Performance Metrics</CardTitle>
+                  <Card className="border-gray-200 shadow-sm bg-white">
+                    <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
+                      <CardTitle className="text-lg font-medium text-gray-800">Performance Metrics</CardTitle>
                     </CardHeader>
                     <CardContent className="p-6">
                       <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="rounded-xl p-4 bg-muted/30">
-                            <p className="text-sm text-muted-foreground">YTD Return</p>
-                            <p className="text-2xl font-bold mt-1 text-green-600 dark:text-green-400">+18.32%</p>
+                        <div className="rounded-xl p-4 bg-gray-50 border border-gray-200">
+                          <div className="flex justify-between items-center">
+                            <h3 className="font-medium text-gray-800">Sharpe Ratio</h3>
+                            <span className="font-semibold text-blue-600">1.86</span>
                           </div>
-                          <div className="rounded-xl p-4 bg-muted/30">
-                            <p className="text-sm text-muted-foreground">1Y Return</p>
-                            <p className="text-2xl font-bold mt-1 text-green-600 dark:text-green-400">+24.65%</p>
+                          <div className="mt-2 h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-blue-600 rounded-full" style={{ width: '74%' }}></div>
                           </div>
-                          <div className="rounded-xl p-4 bg-muted/30">
-                            <p className="text-sm text-muted-foreground">Volatility</p>
-                            <p className="text-2xl font-bold mt-1">12.8%</p>
+                          <p className="mt-2 text-xs text-gray-500">Higher than 67% of similar portfolios</p>
+                        </div>
+                        
+                        <div className="rounded-xl p-4 bg-gray-50 border border-gray-200">
+                          <div className="flex justify-between items-center">
+                            <h3 className="font-medium text-gray-800">Alpha</h3>
+                            <span className="font-semibold text-green-600">+3.24%</span>
                           </div>
-                          <div className="rounded-xl p-4 bg-muted/30">
-                            <p className="text-sm text-muted-foreground">Sharpe Ratio</p>
-                            <p className="text-2xl font-bold mt-1">1.92</p>
+                          <div className="mt-2 h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-green-600 rounded-full" style={{ width: '85%' }}></div>
                           </div>
-                          <div className="rounded-xl p-4 bg-muted/30">
-                            <p className="text-sm text-muted-foreground">Alpha</p>
-                            <p className="text-2xl font-bold mt-1 text-green-600 dark:text-green-400">+4.37%</p>
+                          <p className="mt-2 text-xs text-gray-500">Excess return relative to benchmark</p>
+                        </div>
+                        
+                        <div className="rounded-xl p-4 bg-gray-50 border border-gray-200">
+                          <div className="flex justify-between items-center">
+                            <h3 className="font-medium text-gray-800">Beta</h3>
+                            <span className="font-semibold text-gray-800">0.92</span>
                           </div>
-                          <div className="rounded-xl p-4 bg-muted/30">
-                            <p className="text-sm text-muted-foreground">Beta</p>
-                            <p className="text-2xl font-bold mt-1">0.84</p>
+                          <div className="mt-2 h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-indigo-600 rounded-full" style={{ width: '92%' }}></div>
                           </div>
+                          <p className="mt-2 text-xs text-gray-500">Slightly less volatile than the market</p>
                         </div>
                       </div>
                     </CardContent>
@@ -379,82 +547,91 @@ export default function PortfolioPage() {
               </div>
             </TabsContent>
             
+            {/* Holdings Tab */}
             <TabsContent value="holdings" className="p-0">
-              <div className="border-b border-border p-4 flex justify-between items-center">
+              <div className="border-b border-gray-200 p-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" className="rounded-lg h-9 gap-1">
-                    <Filter className="h-4 w-4" />
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="Search holdings..."
+                      className="pl-9 h-10 w-full sm:w-[260px] rounded-xl border-gray-200"
+                    />
+                  </div>
+                  <Button variant="outline" size="sm" className="rounded-lg h-10 border-gray-200 flex items-center gap-1.5">
+                    <Filter className="h-4 w-4 text-gray-500" />
                     Filter
-                  </Button>
-                  <Button variant="default" size="sm" className="rounded-lg h-9">
-                    Add Stock
                   </Button>
                 </div>
                 <div className="flex items-center gap-2">
-                  <select className="h-9 bg-muted rounded-lg text-sm px-3 border-border focus:ring-primary">
-                    <option>Sort by Value</option>
-                    <option>Sort by Performance</option>
-                    <option>Sort by Name</option>
-                  </select>
+                  <Button variant="outline" size="sm" className="rounded-lg h-10 border-gray-200">
+                    Import
+                  </Button>
+                  <Button variant="default" size="sm" className="rounded-lg h-10 bg-blue-600 text-white hover:bg-blue-700">
+                    Add Stock
+                  </Button>
                 </div>
               </div>
             
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-muted/30">
-                    <tr className="border-b border-border text-left text-sm">
-                      <th className="px-6 py-4 font-medium text-muted-foreground">Stock</th>
-                      <th className="px-6 py-4 font-medium text-muted-foreground text-right">Shares</th>
-                      <th className="px-6 py-4 font-medium text-muted-foreground text-right">Avg. Cost</th>
-                      <th className="px-6 py-4 font-medium text-muted-foreground text-right">Current Price</th>
-                      <th className="px-6 py-4 font-medium text-muted-foreground text-right">Value</th>
-                      <th className="px-6 py-4 font-medium text-muted-foreground text-right">Gain/Loss</th>
-                      <th className="px-6 py-4 font-medium text-muted-foreground text-right">Actions</th>
+                  <thead className="bg-gray-50">
+                    <tr className="border-b border-gray-200 text-left text-sm">
+                      <th className="px-6 py-4 font-medium text-gray-500">Stock</th>
+                      <th className="px-6 py-4 font-medium text-gray-500 text-right">Shares</th>
+                      <th className="px-6 py-4 font-medium text-gray-500 text-right">Avg. Cost</th>
+                      <th className="px-6 py-4 font-medium text-gray-500 text-right">Current Price</th>
+                      <th className="px-6 py-4 font-medium text-gray-500 text-right">Value</th>
+                      <th className="px-6 py-4 font-medium text-gray-500 text-right">Gain/Loss</th>
+                      <th className="px-6 py-4 font-medium text-gray-500 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border">
+                  <tbody className="divide-y divide-gray-100">
                     {portfolio.holdings.map((holding, i) => (
                       <motion.tr 
                         key={holding.stockId}
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.2, delay: i * 0.05 }}
-                        className="group hover:bg-muted/20 transition-colors"
+                        className="group hover:bg-gray-50 transition-colors"
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div 
-                              className="h-10 w-10 rounded-lg flex items-center justify-center"
-                              style={{ backgroundColor: `${holding.stock.color}20` }}
+                              className="h-10 w-10 rounded-lg flex items-center justify-center shadow-sm"
+                              style={{ backgroundColor: `${holding.stock.color}15` }}
                             >
                               <span className="text-xs font-bold" style={{ color: holding.stock.color }}>
                                 {holding.stock.symbol.slice(0, 2)}
                               </span>
                             </div>
                             <div>
-                              <p className="font-medium">{holding.stock.name}</p>
-                              <p className="text-xs text-muted-foreground">{holding.stock.symbol}</p>
+                              <p className="font-medium text-gray-800">{holding.stock.name}</p>
+                              <p className="text-xs text-gray-500">{holding.stock.symbol} • {holding.stock.sector}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-right font-medium">{holding.shares}</td>
-                        <td className="px-6 py-4 text-right font-medium">{formatCurrency(holding.averageCost)}</td>
-                        <td className="px-6 py-4 text-right font-medium">{formatCurrency(holding.stock.price)}</td>
-                        <td className="px-6 py-4 text-right font-bold">{formatCurrency(holding.currentValue)}</td>
+                        <td className="px-6 py-4 text-right font-medium text-gray-800">{holding.shares}</td>
+                        <td className="px-6 py-4 text-right font-medium text-gray-800">{formatCurrency(holding.averageCost)}</td>
+                        <td className="px-6 py-4 text-right font-medium text-gray-800">{formatCurrency(holding.stock.price)}</td>
+                        <td className="px-6 py-4 text-right font-bold text-gray-800">{formatCurrency(holding.currentValue)}</td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex flex-col items-end">
                             <span className={cn(
                               "font-medium",
                               holding.gainLoss >= 0
-                                ? "text-green-600 dark:text-green-400"
-                                : "text-red-600 dark:text-red-400"
+                                ? "text-green-600"
+                                : "text-red-600"
                             )}>
                               {holding.gainLoss >= 0 ? "+" : ""}
                               {formatCurrency(holding.gainLoss)}
                             </span>
                             <Badge 
                               variant={holding.gainLoss >= 0 ? "success" : "destructive"}
-                              className="mt-1"
+                              className="mt-1" 
+                              size="sm"
+                              rounded="full"
                             >
                               {holding.gainLoss >= 0 ? "+" : ""}
                               {formatPercentage(holding.gainLossPercent)}
@@ -463,11 +640,14 @@ export default function PortfolioPage() {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 justify-end">
-                            <Button variant="outline" size="sm" className="h-8 w-8 p-0 rounded-lg">
-                              <PieChart className="h-4 w-4" />
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                              <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="outline" size="sm" className="h-8 w-8 p-0 rounded-lg">
-                              <TrendingUp className="h-4 w-4" />
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                              <Edit3 className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+                              <ExternalLink className="h-4 w-4" />
                             </Button>
                           </div>
                         </td>
