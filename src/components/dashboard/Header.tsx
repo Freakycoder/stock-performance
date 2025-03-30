@@ -1,3 +1,4 @@
+// src/components/dashboard/Header.tsx
 "use client";
 
 import { Bell, Menu } from "lucide-react";
@@ -6,6 +7,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { marketIndexes } from "@/lib/stockData";
+import Link from "next/link";
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -15,7 +17,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   const [showNotifications, setShowNotifications] = useState(false);
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b bg-white/95 backdrop-blur dark:bg-gray-950/95 dark:border-gray-800">
+    <header className="sticky top-0 z-30 w-full border-b bg-white/80 backdrop-blur-md dark:bg-gray-950/80 dark:border-gray-800">
       <div className="flex h-16 items-center px-4 md:px-6">
         <button 
           onClick={onToggleSidebar}
@@ -26,15 +28,17 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         </button>
         
         <div className="mr-4 hidden md:block">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-xl font-bold tracking-tight"
-          >
-            <span className="text-blue-600 dark:text-blue-500">Finance</span>
-            <span className="text-blue-500/70 dark:text-blue-400/70">Dashboard</span>
-          </motion.div>
+          <Link href="/" className="flex items-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-xl font-bold tracking-tight"
+            >
+              <span className="text-blue-600 dark:text-blue-500">Finance</span>
+              <span className="text-blue-500/70 dark:text-blue-400/70">Dashboard</span>
+            </motion.div>
+          </Link>
         </div>
         
         <div className="ml-auto flex items-center gap-4">
@@ -68,14 +72,16 @@ export function Header({ onToggleSidebar }: HeaderProps) {
           </div>
           
           <div className="relative">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setShowNotifications(!showNotifications)}
               className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
               <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-500"></span>
-            </button>
+            </motion.button>
             
             <AnimatePresence>
               {showNotifications && (

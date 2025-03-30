@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { TrendingDown, TrendingUp } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { StockData } from "@/lib/stockData";
 import { cn, formatCompactNumber, formatCurrency, formatPercentage } from "@/lib/utils";
 import { AreaChart } from "@tremor/react";

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUp, ChevronRight, Clock } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/Card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { transactions, getStockById } from "@/lib/stockData";
 import { cn, formatCurrency } from "@/lib/utils";
 import { format, parseISO } from "date-fns";

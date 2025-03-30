@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight, ArrowDownRight, Wallet, TrendingUp, ChevronRight } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/Card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { calculatePortfolioValue } from "@/lib/stockData";
 import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
 import { DonutChart } from "@tremor/react";

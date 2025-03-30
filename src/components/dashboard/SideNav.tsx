@@ -1,3 +1,4 @@
+// src/components/dashboard/SideNav.tsx
 "use client";
 
 import { 
@@ -24,27 +25,27 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/",
     icon: HomeIcon,
   },
   {
     title: "Portfolio",
-    href: "/dashboard/portfolio",
+    href: "/portfolio",
     icon: PieChart,
   },
   {
     title: "Market",
-    href: "/dashboard/market",
+    href: "/market",
     icon: TrendingUp,
   },
   {
     title: "Transactions",
-    href: "/dashboard/transactions",
+    href: "/transactions",
     icon: CreditCard,
   },
   {
     title: "Analytics",
-    href: "/dashboard/analytics",
+    href: "/analytics",
     icon: BarChart3,
   },
 ];
@@ -149,14 +150,14 @@ export function SideNav({ isOpen, onClose }: SideNavProps) {
       </nav>
       <div className="mt-auto space-y-1">
         <Link
-          href="/dashboard/profile"
+          href="/profile"
           className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
         >
           <User2 className="mr-3 h-5 w-5" />
           Profile
         </Link>
         <Link
-          href="/dashboard/settings"
+          href="/settings"
           className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
         >
           <Settings className="mr-3 h-5 w-5" />

@@ -1,93 +1,232 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Header } from "@/components/dashboard/Header";
-import { SideNav } from "@/components/dashboard/SideNav";
-import { PortfolioOverview } from "@/components/dashboard/PortfolioOverview";
-import { PortfolioAllocation } from "@/components/dashboard/PortfolioAllocation";
+// src/pages/index.tsx
+import { useState, useEffect } from "react";
+import { 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle, 
+  CardDescription 
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DollarSign, TrendingUp, ArrowUpRight } from "lucide-react";
+import { stocks } from "@/lib/stockData";
+import { StockChart } from "@/components/dashboard/StockChart";
 import { TopStocks } from "@/components/dashboard/TopStocks";
 import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
-import { StockPerformanceCard } from "@/components/dashboard/StockPerformanceCard";
-import { StockChart } from "@/components/dashboard/StockChart";
-import { stocks } from "@/lib/stockData";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { motion } from "framer-motion";
+import { DonutChart } from "@tremor/react";
 
 export default function Dashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   // Get a featured stock for the main chart (e.g., NVDA)
   const featuredStock = stocks.find(stock => stock.symbol === 'NVDA') || stocks[0];
 
-  return (
-    <div className="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-50">
-      <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-      <div className="flex flex-1">
-        <SideNav isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main className="flex-1 bg-gray-50 dark:bg-gray-900">
-          <div className="container mx-auto p-4 md:p-6 lg:p-8">
-            <motion.h1
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-2xl font-bold tracking-tight mb-6"
-            >
-              Dashboard
-            </motion.h1>
-            
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              {/* Featured Stock Chart */}
-              <Card className="lg:col-span-8">
-                <CardHeader className="bg-blue-50 px-6 py-5 dark:bg-blue-950/20">
-                  <CardTitle className="text-lg font-semibold">
-                    {featuredStock.name} ({featuredStock.symbol})
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <StockChart
-                    data={featuredStock.historicalData}
-                    color={featuredStock.color}
-                    type="area"
-                    height={400}
-                  />
-                </CardContent>
-              </Card>
-              
-              {/* Portfolio Overview */}
-              <div className="lg:col-span-4">
-                <PortfolioOverview />
-              </div>
-              
-              {/* Portfolio Allocation */}
-              <div className="lg:col-span-4">
-                <PortfolioAllocation />
-              </div>
-              
-              {/* Recent Transactions */}
-              <div className="lg:col-span-4">
-                <RecentTransactions />
-              </div>
-              
-              {/* Top Stocks */}
-              <div className="lg:col-span-4">
-                <TopStocks />
-              </div>
-              
-              {/* Stock Cards */}
-              <div className="lg:col-span-12">
-                <h2 className="text-xl font-semibold mb-4">Market Overview</h2>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {stocks.slice(0, 4).map((stock, i) => (
-                    <StockPerformanceCard 
-                      key={stock.id} 
-                      stock={stock} 
-                      animationDelay={i * 0.1}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
+  // Portfolio allocation chart data
+  const portfolioData = [
+    { name: "Technology", value: 45 },
+    { name: "Finance", value: 25 },
+    { name: "Healthcare", value: 15 },
+    { name: "Consumer", value: 10 },
+    { name: "Energy", value: 5 },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
+          <p className="text-sm text-muted-foreground">Loading dashboard...</p>
+        </div>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <DashboardLayout>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Stats Cards */}
+        <Card className="animate-fade-in">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Value</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$18,218.51</div>
+            <div className="flex items-center text-xs text-success">
+              <ArrowUpRight className="mr-1 h-3 w-3" />
+              <span>15.53% from initial</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="animate-fade-in [animation-delay:150ms]">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Gain/Loss</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$2,448.51</div>
+            <div className="flex items-center text-xs text-success">
+              <ArrowUpRight className="mr-1 h-3 w-3" />
+              <span>15.53% from initial</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="animate-fade-in [animation-delay:300ms]">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Monthly Return</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$428.33</div>
+            <div className="flex items-center text-xs text-success">
+              <ArrowUpRight className="mr-1 h-3 w-3" />
+              <span>2.4% this month</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="animate-fade-in [animation-delay:450ms]">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Assets</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">5 Stocks</div>
+            <div className="text-xs text-muted-foreground">
+              Across 3 sectors
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        {/* Featured Stock Chart */}
+        <Card className="col-span-4 animate-fade-in [animation-delay:600ms]">
+          <CardHeader>
+            <CardTitle>{featuredStock.name} ({featuredStock.symbol})</CardTitle>
+            <CardDescription>
+              Current Price: ${featuredStock.price.toLocaleString()} | 
+              {featuredStock.changePercent >= 0 ? 
+                <span className="text-success"> +{featuredStock.changePercent.toFixed(2)}%</span> : 
+                <span className="text-destructive"> {featuredStock.changePercent.toFixed(2)}%</span>
+              }
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <Tabs defaultValue="1M">
+              <div className="flex justify-end p-2">
+                <TabsList>
+                  <TabsTrigger value="1W">1W</TabsTrigger>
+                  <TabsTrigger value="1M">1M</TabsTrigger>
+                  <TabsTrigger value="3M">3M</TabsTrigger>
+                  <TabsTrigger value="1Y">1Y</TabsTrigger>
+                  <TabsTrigger value="All">All</TabsTrigger>
+                </TabsList>
+              </div>
+              <TabsContent value="1W" className="px-2">
+                <StockChart
+                  data={featuredStock.historicalData.slice(-7)}
+                  color={featuredStock.color}
+                  type="area"
+                  height={350}
+                />
+              </TabsContent>
+              <TabsContent value="1M" className="px-2">
+                <StockChart
+                  data={featuredStock.historicalData.slice(-30)}
+                  color={featuredStock.color}
+                  type="area"
+                  height={350}
+                />
+              </TabsContent>
+              <TabsContent value="3M" className="px-2">
+                <StockChart
+                  data={featuredStock.historicalData.slice(-90)}
+                  color={featuredStock.color}
+                  type="area"
+                  height={350}
+                />
+              </TabsContent>
+              <TabsContent value="1Y" className="px-2">
+                <StockChart
+                  data={featuredStock.historicalData}
+                  color={featuredStock.color}
+                  type="area"
+                  height={350}
+                />
+              </TabsContent>
+              <TabsContent value="All" className="px-2">
+                <StockChart
+                  data={featuredStock.historicalData}
+                  color={featuredStock.color}
+                  type="area"
+                  height={350}
+                />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+
+        {/* Portfolio Overview */}
+        <Card className="col-span-3 animate-fade-in [animation-delay:750ms]">
+          <CardHeader>
+            <CardTitle>Portfolio Breakdown</CardTitle>
+            <CardDescription>
+              Asset allocation across sectors
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DonutChart
+              data={portfolioData}
+              category="value"
+              index="name"
+              valueFormatter={(value) => `${value}%`}
+              colors={["blue", "violet", "indigo", "rose", "cyan"]}
+              className="h-64"
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        {/* Recent Transactions */}
+        <Card className="col-span-3 animate-fade-in [animation-delay:900ms]">
+          <CardHeader>
+            <CardTitle>Recent Transactions</CardTitle>
+            <CardDescription>
+              Your latest trading activity
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RecentTransactions limit={5} />
+          </CardContent>
+        </Card>
+
+        {/* Top Stocks */}
+        <Card className="col-span-4 animate-fade-in [animation-delay:1050ms]">
+          <CardHeader>
+            <CardTitle>Top Performers</CardTitle>
+            <CardDescription>
+              Best performing stocks in your portfolio
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TopStocks limit={5} />
+          </CardContent>
+        </Card>
+      </div>
+    </DashboardLayout>
   );
 }

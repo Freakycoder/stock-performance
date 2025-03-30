@@ -1,16 +1,20 @@
+// src/components/dashboard/StockChart.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { HistoricalDataPoint } from "@/lib/types";
-import { Button } from "../ui/Button";
 import { formatCurrency } from "@/lib/utils";
 
 // Dynamically import ApexCharts to avoid SSR issues
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { 
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-[400px]">Loading chart...</div>
+  loading: () => (
+    <div className="flex h-[350px] items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
+    </div>
+  )
 });
 
 interface StockChartProps {
@@ -21,16 +25,13 @@ interface StockChartProps {
   height?: number;
 }
 
-type TimeRange = "1W" | "1M" | "3M" | "1Y" | "All";
-
 export function StockChart({ 
   data, 
   color = "#3b82f6",
   type = 'area',
   showVolume = true,
-  height = 400 
+  height = 350 
 }: StockChartProps) {
-  const [timeRange, setTimeRange] = useState<TimeRange>("1M");
   const [mounted, setMounted] = useState(false);
   
   // Set mounted state to true when component mounts
@@ -38,33 +39,21 @@ export function StockChart({
     setMounted(true);
   }, []);
   
-  // Filter data based on selected time range
-  const filteredData = () => {
-    if (!data || data.length === 0) return [];
-    if (timeRange === "1W") return data.slice(-7);
-    if (timeRange === "1M") return data.slice(-30);
-    if (timeRange === "3M") return data.slice(-90);
-    if (timeRange === "1Y") return data.slice(-365);
-    return data;
-  };
-  
-  const chartData = filteredData();
-  
   // Check if we have valid data to display
-  const hasValidData = chartData && chartData.length > 0;
+  const hasValidData = data && data.length > 0;
   
   // Prepare data for chart only if we have valid data
   const seriesData = hasValidData ? (type === 'area' 
-    ? chartData.map(item => ({
+    ? data.map(item => ({
         x: new Date(item.date).getTime(),
         y: item.price
       }))
-    : chartData.map(item => ({
+    : data.map(item => ({
         x: new Date(item.date).getTime(),
         y: [item.open, item.high, item.low, item.close]
       }))) : [];
       
-  const volumeData = hasValidData ? chartData.map(item => ({
+  const volumeData = hasValidData ? data.map(item => ({
     x: new Date(item.date).getTime(),
     y: item.volume
   })) : [];
@@ -85,7 +74,7 @@ export function StockChart({
       fontFamily: 'inherit',
     },
     theme: {
-      mode: 'light', // Will respect system theme with CSS variables
+      mode: 'dark',
     },
     colors: [color],
     grid: {
@@ -120,6 +109,7 @@ export function StockChart({
         style: {
           fontSize: '12px',
           fontFamily: 'inherit',
+          colors: 'rgba(107, 114, 128, 0.8)',
         },
       },
       axisBorder: {
@@ -137,6 +127,7 @@ export function StockChart({
         style: {
           fontSize: '12px',
           fontFamily: 'inherit',
+          colors: 'rgba(107, 114, 128, 0.8)',
         },
       },
       axisBorder: {
@@ -176,7 +167,7 @@ export function StockChart({
     chart: {
       ...chartOptions.chart,
       type: 'bar',
-      height: 100,
+      height: 80,
     },
     tooltip: {
       ...chartOptions.tooltip,
@@ -200,34 +191,13 @@ export function StockChart({
       }
     },
   };
-  
-  const timeRangeButtons: TimeRange[] = ["1W", "1M", "3M", "1Y", "All"];
 
   // Don't render the chart until we're mounted and have valid data
-  if (!mounted) return <div style={{ height }} className="flex items-center justify-center">Loading...</div>;
-  if (!hasValidData) return <div style={{ height }} className="flex items-center justify-center">No data available</div>;
+  if (!mounted) return <div style={{ height }} className="flex items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div></div>;
+  if (!hasValidData) return <div style={{ height }} className="flex items-center justify-center text-muted-foreground">No data available</div>;
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end gap-1">
-        {timeRangeButtons.map((range) => (
-          <motion.div 
-            key={range}
-            whileHover={{ y: -2 }}
-            whileTap={{ y: 1 }}
-          >
-            <Button
-              variant={timeRange === range ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setTimeRange(range)}
-              className="h-7 px-2 text-xs"
-            >
-              {range}
-            </Button>
-          </motion.div>
-        ))}
-      </div>
-      
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -249,7 +219,7 @@ export function StockChart({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-4"
+          className="mt-2"
         >
           <ReactApexChart
             options={volumeOptions as any}
@@ -258,7 +228,7 @@ export function StockChart({
               data: volumeData
             }]}
             type="bar"
-            height={100}
+            height={80}
           />
         </motion.div>
       )}

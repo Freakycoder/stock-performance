@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { calculateSectorAllocation } from "@/lib/stockData";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { DonutChart, Legend } from "@tremor/react";
