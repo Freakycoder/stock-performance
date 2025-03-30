@@ -307,3 +307,5 @@ export const marketIndexes = [
 export const getStockById = (id: string): StockData | undefined => {
   return stocks.find(stock => stock.id === id);
 };
+
+export type { HistoricalDataPoint, StockData };

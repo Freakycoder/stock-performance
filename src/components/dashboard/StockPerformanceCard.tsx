@@ -14,7 +14,7 @@ interface StockPerformanceCardProps {
 
 export function StockPerformanceCard({ stock, animationDelay = 0 }: StockPerformanceCardProps) {
   // Format data for Tremor chart
-  const chartData = stock.historicalData.slice(-30).map(data => ({
+  const chartData = stock.historicalData.slice(-30).map((data : any) => ({
     date: data.date,
     Price: data.price,
   }));

@@ -3,12 +3,15 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { HistoricalDataPoint } from "@/lib/stockData";
+import { HistoricalDataPoint } from "@/lib/types";
 import { Button } from "../ui/Button";
 import { formatCurrency } from "@/lib/utils";
 
 // Dynamically import ApexCharts to avoid SSR issues
-const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const ReactApexChart = dynamic(() => import("react-apexcharts"), { 
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-[400px]">Loading chart...</div>
+});
 
 interface StockChartProps {
   data: HistoricalDataPoint[];
@@ -37,6 +40,7 @@ export function StockChart({
   
   // Filter data based on selected time range
   const filteredData = () => {
+    if (!data || data.length === 0) return [];
     if (timeRange === "1W") return data.slice(-7);
     if (timeRange === "1M") return data.slice(-30);
     if (timeRange === "3M") return data.slice(-90);
@@ -46,8 +50,11 @@ export function StockChart({
   
   const chartData = filteredData();
   
-  // Prepare data for chart
-  const seriesData = type === 'area' 
+  // Check if we have valid data to display
+  const hasValidData = chartData && chartData.length > 0;
+  
+  // Prepare data for chart only if we have valid data
+  const seriesData = hasValidData ? (type === 'area' 
     ? chartData.map(item => ({
         x: new Date(item.date).getTime(),
         y: item.price
@@ -55,12 +62,12 @@ export function StockChart({
     : chartData.map(item => ({
         x: new Date(item.date).getTime(),
         y: [item.open, item.high, item.low, item.close]
-      }));
+      }))) : [];
       
-  const volumeData = chartData.map(item => ({
+  const volumeData = hasValidData ? chartData.map(item => ({
     x: new Date(item.date).getTime(),
     y: item.volume
-  }));
+  })) : [];
   
   // ApexCharts options
   const chartOptions = {
@@ -160,7 +167,7 @@ export function StockChart({
           useFillColor: true,
         }
       }
-    } : undefined,
+    } : {},
   };
   
   // Volume chart options
@@ -196,7 +203,9 @@ export function StockChart({
   
   const timeRangeButtons: TimeRange[] = ["1W", "1M", "3M", "1Y", "All"];
 
-  if (!mounted) return <div style={{ height }} />;
+  // Don't render the chart until we're mounted and have valid data
+  if (!mounted) return <div style={{ height }} className="flex items-center justify-center">Loading...</div>;
+  if (!hasValidData) return <div style={{ height }} className="flex items-center justify-center">No data available</div>;
 
   return (
     <div className="space-y-4">

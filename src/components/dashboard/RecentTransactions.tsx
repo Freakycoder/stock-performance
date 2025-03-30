@@ -15,10 +15,10 @@ export function RecentTransactions() {
 
   return (
     <Card>
-      <CardHeader className="bg-primary/5 px-6 py-5 dark:bg-primary/10">
+      <CardHeader className="bg-blue-50 px-6 py-5 dark:bg-blue-900/20">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold">Recent Transactions</CardTitle>
-          <Clock className="h-5 w-5 text-muted-foreground" />
+          <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400" />
         </div>
       </CardHeader>
       <CardContent className="p-6">
@@ -41,8 +41,8 @@ export function RecentTransactions() {
                     className={cn(
                       "flex h-10 w-10 items-center justify-center rounded-full mr-3",
                       transaction.type === 'buy' 
-                        ? "bg-profit-100 text-profit-700 dark:bg-profit-900 dark:text-profit-300" 
-                        : "bg-loss-100 text-loss-700 dark:bg-loss-900 dark:text-loss-300"
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" 
+                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
                     )}
                   >
                     {transaction.type === 'buy' ? (
@@ -55,7 +55,7 @@ export function RecentTransactions() {
                     <p className="font-medium">
                       {transaction.type === 'buy' ? 'Bought' : 'Sold'} {stock.symbol}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       {transaction.shares} {transaction.shares === 1 ? 'share' : 'shares'} @ {formatCurrency(transaction.price)}
                     </p>
                   </div>
@@ -65,7 +65,7 @@ export function RecentTransactions() {
                     {transaction.type === 'buy' ? '-' : '+'}
                     {formatCurrency(transaction.shares * transaction.price)}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {format(parseISO(transaction.date), 'MMM d, yyyy')}
                   </p>
                 </div>
@@ -75,13 +75,13 @@ export function RecentTransactions() {
 
           {transactions.length === 0 && (
             <div className="flex flex-col items-center justify-center py-6">
-              <p className="text-muted-foreground">No transactions yet</p>
+              <p className="text-gray-500 dark:text-gray-400">No transactions yet</p>
             </div>
           )}
         </div>
       </CardContent>
-      <CardFooter className="bg-card border-t p-4">
-        <button className="flex w-full items-center justify-center text-sm font-medium text-primary">
+      <CardFooter className="bg-white border-t p-4 dark:bg-gray-950 dark:border-gray-800">
+        <button className="flex w-full items-center justify-center text-sm font-medium text-blue-600 dark:text-blue-500">
           View All Transactions
           <ChevronRight className="ml-1 h-4 w-4" />
         </button>

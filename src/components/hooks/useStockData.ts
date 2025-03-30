@@ -1,8 +1,15 @@
 import { useMemo, useState } from 'react';
-import { HistoricalDataPoint, StockData, TimeRange } from '@/lib/types';
+import { HistoricalDataPoint, StockData } from '@/lib/types';
 import { stocks as mockStocks } from '@/lib/stockData';
 
-const timeRanges: TimeRange[] = [
+// Define TimeRange type locally instead of importing from types
+interface TimeRangeOption {
+  label: string;
+  value: string;
+  days: number;
+}
+
+const timeRanges: TimeRangeOption[] = [
   { label: '1D', value: '1D', days: 1 },
   { label: '1W', value: '1W', days: 7 },
   { label: '1M', value: '1M', days: 30 },
@@ -12,7 +19,7 @@ const timeRanges: TimeRange[] = [
 ];
 
 export function useStockData(stockId?: string) {
-  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange['value']>('1M');
+  const [selectedTimeRange, setSelectedTimeRange] = useState<string>('1M');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Fetch all stocks or a specific stock

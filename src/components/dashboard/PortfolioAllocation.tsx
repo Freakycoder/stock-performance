@@ -31,7 +31,7 @@ export function PortfolioAllocation() {
 
   return (
     <Card>
-      <CardHeader className="bg-primary/5 px-6 py-5 dark:bg-primary/10">
+      <CardHeader className="bg-blue-50 px-6 py-5 dark:bg-blue-900/20">
         <CardTitle className="text-lg font-semibold">Portfolio Allocation</CardTitle>
       </CardHeader>
       <CardContent className="p-6">
@@ -60,14 +60,14 @@ export function PortfolioAllocation() {
         </div>
         
         <div className="mt-6 space-y-2">
-          <p className="text-sm font-medium text-muted-foreground mb-3">Allocation Details</p>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Allocation Details</p>
           {sectorAllocation.map((sector, i) => (
             <motion.div
               key={sector.sector}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
-              className="flex items-center justify-between border-b border-border pb-2"
+              className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-2"
             >
               <div className="flex items-center">
                 <div 
@@ -77,7 +77,7 @@ export function PortfolioAllocation() {
                 <span className="text-sm font-medium">{sector.sector}</span>
               </div>
               <div className="flex gap-6">
-                <span className="text-sm text-muted-foreground">{formatCurrency(sector.value)}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{formatCurrency(sector.value)}</span>
                 <span className="text-sm font-medium w-16 text-right">{formatPercentage(sector.percentage)}</span>
               </div>
             </motion.div>

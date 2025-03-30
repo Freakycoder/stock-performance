@@ -32,10 +32,10 @@ export function TopStocks() {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Card>
-        <CardHeader className="bg-profit-50/30 px-6 py-5 dark:bg-profit-900/20">
+        <CardHeader className="bg-green-50/30 px-6 py-5 dark:bg-green-900/20">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-semibold">Top Gainers</CardTitle>
-            <TrendingUp className="h-5 w-5 text-profit-600" />
+            <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
           </div>
         </CardHeader>
         <CardContent className="p-6">
@@ -61,13 +61,13 @@ export function TopStocks() {
                       </div>
                       <div>
                         <p className="font-semibold">{stock.name}</p>
-                        <p className="text-xs text-muted-foreground">{stock.symbol}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{stock.symbol}</p>
                       </div>
                     </div>
                   </div>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-xl font-bold">{formatCurrency(stock.price)}</span>
-                    <span className="text-sm font-medium text-profit-600">
+                    <span className="text-sm font-medium text-green-600 dark:text-green-400">
                       +{formatPercentage(stock.changePercent)}
                     </span>
                   </div>
@@ -92,8 +92,8 @@ export function TopStocks() {
             ))}
           </div>
         </CardContent>
-        <CardFooter className="bg-card border-t p-4">
-          <button className="flex w-full items-center justify-center text-sm font-medium text-primary">
+        <CardFooter className="bg-white border-t p-4 dark:bg-gray-950 dark:border-gray-800">
+          <button className="flex w-full items-center justify-center text-sm font-medium text-blue-600 dark:text-blue-500">
             View All Gainers
             <ChevronRight className="ml-1 h-4 w-4" />
           </button>
@@ -101,10 +101,10 @@ export function TopStocks() {
       </Card>
       
       <Card>
-        <CardHeader className="bg-loss-50/30 px-6 py-5 dark:bg-loss-900/20">
+        <CardHeader className="bg-red-50/30 px-6 py-5 dark:bg-red-900/20">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-semibold">Top Losers</CardTitle>
-            <TrendingDown className="h-5 w-5 text-loss-600" />
+            <TrendingDown className="h-5 w-5 text-red-600 dark:text-red-400" />
           </div>
         </CardHeader>
         <CardContent className="p-6">
@@ -130,13 +130,13 @@ export function TopStocks() {
                       </div>
                       <div>
                         <p className="font-semibold">{stock.name}</p>
-                        <p className="text-xs text-muted-foreground">{stock.symbol}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{stock.symbol}</p>
                       </div>
                     </div>
                   </div>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-xl font-bold">{formatCurrency(stock.price)}</span>
-                    <span className="text-sm font-medium text-loss-600">
+                    <span className="text-sm font-medium text-red-600 dark:text-red-400">
                       {formatPercentage(stock.changePercent)}
                     </span>
                   </div>
@@ -161,8 +161,8 @@ export function TopStocks() {
             ))}
           </div>
         </CardContent>
-        <CardFooter className="bg-card border-t p-4">
-          <button className="flex w-full items-center justify-center text-sm font-medium text-primary">
+        <CardFooter className="bg-white border-t p-4 dark:bg-gray-950 dark:border-gray-800">
+          <button className="flex w-full items-center justify-center text-sm font-medium text-blue-600 dark:text-blue-500">
             View All Losers
             <ChevronRight className="ml-1 h-4 w-4" />
           </button>
