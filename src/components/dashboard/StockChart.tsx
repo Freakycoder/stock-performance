@@ -460,12 +460,9 @@ export function StockChart({
       <CardHeader className="flex-shrink-0 border-b border-gray-200 bg-gray-50 p-6">
         <div className="flex flex-wrap gap-4 justify-between">
           <div className="flex items-center gap-4">
-            <div 
-              className="h-10 w-12 rounded-xl flex items-center justify-center shadow-sm"
-              style={{ backgroundColor: `${color}15` }}
-            >
-              <img className="h-10 w-12 rounded-lg" src = {`${symbol}`}></img>
-            </div>
+            
+              <img className="h-12 w-12 rounded-lg" src = {`${symbol}`}></img>
+            
             <div>
               <div className="flex items-center gap-3">
                 <CardTitle className="text-xl font-bold text-gray-800 truncate max-w-[240px]">{name}</CardTitle>
