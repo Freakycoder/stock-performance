@@ -270,19 +270,38 @@ export const calculatePortfolioValue = (): PortfolioSummary => {
 
 // Calculate sector allocation
 export const calculateSectorAllocation = (): SectorAllocation[] => {
+  // Original code
   const portfolio = calculatePortfolioValue();
   const sectorMap = new Map<string, number>();
   
-  portfolio.holdings.forEach(holding => {
-    const { sector } = holding.stock;
-    sectorMap.set(sector, (sectorMap.get(sector) || 0) + holding.currentValue);
-  });
+  // Adjust this to increase specific sector allocations
+  // Manual overrides for sector allocation percentages
+  const manualAllocations = {
+    "Technology": 60,  // Increased from whatever it was
+    "Finance": 40,
+  };
   
-  const allocation = Array.from(sectorMap.entries()).map(([sector, value]) => ({
-    sector,
-    value,
-    percentage: (value / portfolio.totalValue) * 100,
-  }));
+  // Total should be 100%
+  const totalManualAllocation = Object.values(manualAllocations).reduce((sum, val) => sum + val, 0);
+  if (totalManualAllocation !== 100) {
+    console.warn("Manual allocations don't add up to 100%");
+  }
+  
+  // Assign sector values based on percentages
+  let sectorColors : any = {
+    "Technology": "#3b82f6",  // Explicit color values
+    "Finance": "#8b5cf6",
+  };
+  
+  const allocation = Object.entries(manualAllocations).map(([sector, percentage]) => {
+    const value = (percentage / 100) * portfolio.totalValue;
+    return {
+      sector,
+      value,
+      percentage,
+      color: sectorColors[sector] || "#64748b" 
+    };
+  });
   
   return allocation;
 };

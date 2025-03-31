@@ -1,26 +1,24 @@
-"use client";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { calculateSectorAllocation } from "@/lib/stockData";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
-import { DonutChart } from "@tremor/react";
-import { TrendingUp, PieChart, AlertCircle } from "lucide-react";
+import { PieChart, AlertCircle, TrendingUp } from "lucide-react";
+import { Button } from "../ui/button";
+
+// Import Recharts components
+import {
+  ResponsiveContainer,
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+  Tooltip,
+} from 'recharts';
 
 export function PortfolioAllocation() {
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
   const sectorAllocation = calculateSectorAllocation();
   
-  // Prepare data for Tremor donut chart
-  const chartData = sectorAllocation.map(item => ({
-    name: item.sector,
-    value: item.percentage,
-  }));
-
-  // Value formatter function for the chart
-  const valueFormatter = (value: number) => `${value.toFixed(1)}%`;
-
   // Define sector colors - vibrant and visually distinct
   const customColors = [
     "#3b82f6", // blue
@@ -31,6 +29,13 @@ export function PortfolioAllocation() {
     "#0ea5e9", // sky
     "#6366f1", // indigo
   ];
+
+  // Prepare data for Recharts
+  const chartData = sectorAllocation.map(item => ({
+    name: item.sector,
+    value: item.percentage,
+    color: customColors[0], // Fallback to a default color if none specified
+  }));
 
   // Helper function to get the recommendation
   const getRecommendation = () => {
@@ -69,6 +74,24 @@ export function PortfolioAllocation() {
   
   const recommendation = getRecommendation();
 
+  // Custom tooltip formatter
+  const CustomTooltip = ({ active, payload } : any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      return (
+        <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-md">
+          <p className="font-medium text-gray-800">{data.name}</p>
+          <p className="text-gray-600">
+            {formatPercentage(data.value)}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const RecommendationIcon = recommendation.icon;
+
   return (
     <Card className="flex flex-col overflow-hidden bg-white border-gray-200 shadow-sm h-full">
       <CardHeader className="flex-shrink-0 p-6 border-b border-gray-200 bg-gray-50">
@@ -79,7 +102,6 @@ export function PortfolioAllocation() {
             </div>
             <CardTitle className="text-xl font-bold text-gray-800">Portfolio Allocation</CardTitle>
           </div>
-          
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-auto p-6">
@@ -90,7 +112,7 @@ export function PortfolioAllocation() {
           className="mb-6"
         >
           <div className={`p-4 rounded-xl ${recommendation.bgColor} mb-6 flex items-start gap-3`}>
-            <recommendation.icon className={`h-5 w-5 mt-0.5 ${recommendation.color}`} />
+            <RecommendationIcon className={`h-5 w-5 mt-0.5 ${recommendation.color}`} />
             <div>
               <p className="font-medium text-gray-800">{recommendation.text}</p>
               <p className="text-sm text-gray-600">{recommendation.action}</p>
@@ -98,17 +120,36 @@ export function PortfolioAllocation() {
           </div>
           
           <div className="flex justify-center">
-            <DonutChart
-              data={chartData}
-              category="value"
-              index="name"
-              valueFormatter={valueFormatter}
-              colors={customColors}
-              className="h-64 mt-4 w-full max-w-[400px]"
-              showLabel={false}
-              showAnimation={true}
-              onValueChange={(v) => setSelectedSector(v?.name || null)}
-            />
+            <div className="h-64 w-full max-w-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsPieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={2}
+                    dataKey="value"
+                    onClick={(data) => {
+                      if (data && data.name) {
+                        setSelectedSector(data.name === selectedSector ? null : data.name);
+                      }
+                    }}
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.color} 
+                        stroke={entry.name === selectedSector ? '#1e40af' : '#fff'}
+                        strokeWidth={entry.name === selectedSector ? 2 : 1}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </RechartsPieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </motion.div>
         
@@ -166,12 +207,12 @@ export function PortfolioAllocation() {
               }.
             </p>
             <div className="mt-3 flex gap-2">
-              <button className="px-3 py-1.5 text-xs font-medium rounded-lg border border-blue-200 text-blue-600 hover:bg-blue-100">
+              <Button variant="outline" className="text-xs font-medium rounded-lg border-blue-200 text-blue-600 hover:bg-blue-100">
                 View Details
-              </button>
-              <button className="px-3 py-1.5 text-xs font-medium rounded-lg border border-blue-600 bg-blue-600 text-white hover:bg-blue-700">
+              </Button>
+              <Button variant="default" className="text-xs font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700">
                 Adjust Allocation
-              </button>
+              </Button>
             </div>
           </motion.div>
         )}
