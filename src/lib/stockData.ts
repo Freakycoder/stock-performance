@@ -112,7 +112,7 @@ export const stocks: StockData[] = [
     changePercent: -2.60,
     volume: 98765000,
     marketCap: 620000000000,
-    logo: '/logo/tesla.jpg',
+    logo: '/logo/tesla-white.jpg',
     sector: 'Automotive',
     color: '#22c55e',
     historicalData: generateHistoricalData(210, 0.025),
@@ -126,7 +126,7 @@ export const stocks: StockData[] = [
     changePercent: 3.15,
     volume: 54789000,
     marketCap: 2070000000000,
-    logo: '/logo/nvidea.jpg',
+    logo: '/logo/nvidia.jpg',
     sector: 'Technology',
     color: '#14b8a6',
     historicalData: generateHistoricalData(800, 0.02),
@@ -140,7 +140,7 @@ export const stocks: StockData[] = [
     changePercent: 2.66,
     volume: 21345000,
     marketCap: 1220000000000,
-    logo: '/logo/meta.jpg',
+    logo: '/logo/meta-white.jpg',
     sector: 'Technology',
     color: '#ec4899',
     historicalData: generateHistoricalData(450, 0.015),
@@ -166,8 +166,8 @@ export const portfolioHoldings: PortfolioHolding[] = [
   { stockId: '1', shares: 15, averageCost: 150.25, logo : '/logo/apple.jpg' },
   { stockId: '2', shares: 8, averageCost: 380.50, logo : '/logo/microsoft.jpg' },
   { stockId: '4', shares: 20, averageCost: 125.80, logo : '/logo/google.jpg' },
-  { stockId: '6', shares: 5, averageCost: 750.65, logo : '/logo/nvidea.jpg' },
-  { stockId: '7', shares: 10, averageCost: 420.30, logo : '/logo/meta.jpg' },
+  { stockId: '6', shares: 5, averageCost: 750.65, logo : '/logo/nvidia.jpg' },
+  { stockId: '7', shares: 10, averageCost: 420.30, logo : '/logo/meta-white.jpg' },
 ];
 
 // Mock transaction history
@@ -179,6 +179,7 @@ export const transactions: Transaction[] = [
     shares: 5,
     price: 185.45,
     date: format(subDays(new Date(), 15), 'yyyy-MM-dd'),
+    logo : '/logo/apple.jpg'
   },
   {
     id: 't2',
@@ -187,6 +188,7 @@ export const transactions: Transaction[] = [
     shares: 2,
     price: 790.20,
     date: format(subDays(new Date(), 10), 'yyyy-MM-dd'),
+    logo : '/logo/nvidia.jpg'
   },
   {
     id: 't3',
@@ -195,6 +197,7 @@ export const transactions: Transaction[] = [
     shares: 12,
     price: 180.15,
     date: format(subDays(new Date(), 7), 'yyyy-MM-dd'),
+    logo : '/logo/amazon.jpg'
   },
   {
     id: 't4',
@@ -203,6 +206,7 @@ export const transactions: Transaction[] = [
     shares: 3,
     price: 450.78,
     date: format(subDays(new Date(), 5), 'yyyy-MM-dd'),
+    logo : '/logo/meta-white.jpg'
   },
   {
     id: 't5',
@@ -211,6 +215,7 @@ export const transactions: Transaction[] = [
     shares: 1,
     price: 415.30,
     date: format(subDays(new Date(), 3), 'yyyy-MM-dd'),
+    logo : '/logo/microsoft.jpg'
   },
   {
     id: 't6',
@@ -219,6 +224,7 @@ export const transactions: Transaction[] = [
     shares: 8,
     price: 205.65,
     date: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
+    logo : '/logo/tesla-white.jpg'
   },
 ];
 
