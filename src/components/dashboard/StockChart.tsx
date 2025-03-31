@@ -464,12 +464,12 @@ export function StockChart({
               className="h-10 w-12 rounded-xl flex items-center justify-center shadow-sm"
               style={{ backgroundColor: `${color}15` }}
             >
-              <img className="rounded-lg" src = {`${symbol}`}></img>
+              <img className="h-10 w-12 rounded-lg" src = {`${symbol}`}></img>
             </div>
             <div>
               <div className="flex items-center gap-3">
                 <CardTitle className="text-xl font-bold text-gray-800 truncate max-w-[240px]">{name}</CardTitle>
-                <span className="rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-500">{symbol}</span>
+                
                 <a href="#" className="text-gray-400 hover:text-gray-600 transition-colors">
                   <ExternalLink className="h-4 w-4" />
                 </a>
@@ -493,10 +493,10 @@ export function StockChart({
             </div>
             <Tabs value={timeRange} onValueChange={(value) => setTimeRange(value as any)}>
               <TabsList className="h-9 p-1 bg-gray-100 rounded-lg">
-                <TabsTrigger value="1W" className="rounded-md px-3 py-1.5 text-xs">1W</TabsTrigger>
-                <TabsTrigger value="1M" className="rounded-md px-3 py-1.5 text-xs">1M</TabsTrigger>
-                <TabsTrigger value="3M" className="rounded-md px-3 py-1.5 text-xs">3M</TabsTrigger>
-                <TabsTrigger value="1Y" className="rounded-md px-3 py-1.5 text-xs">1Y</TabsTrigger>
+                <TabsTrigger value="1W" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">1W</TabsTrigger>
+                <TabsTrigger value="1M" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">1M</TabsTrigger>
+                <TabsTrigger value="3M" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">3M</TabsTrigger>
+                <TabsTrigger value="1Y" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">1Y</TabsTrigger>
               </TabsList>
             </Tabs>
             <button className="rounded-full p-2 hover:bg-gray-100 text-blue-600">

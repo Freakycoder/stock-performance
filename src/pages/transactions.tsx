@@ -364,14 +364,9 @@ export default function TransactionsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div 
-                              className="h-9 w-9 rounded-lg flex items-center justify-center shadow-sm" 
-                              style={{ backgroundColor: `${stock.color}15` }}
-                            >
-                              <span className="text-xs font-bold" style={{ color: stock.color }}>
-                                {stock.symbol.slice(0, 2)}
-                              </span>
-                            </div>
+                            
+                              <img  className="h-8 w-8 rounded-lg" src={`${transaction.logo}`}></img>
+                            
                             <div>
                               <p className="font-medium text-gray-800">{stock.name}</p>
                               <div className="flex items-center gap-2 mt-0.5">

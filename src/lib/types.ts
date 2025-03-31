@@ -47,6 +47,7 @@ export interface Transaction {
   shares: number;
   price: number;
   date: string;
+  logo : string
 }
 
 export interface PortfolioSummary {

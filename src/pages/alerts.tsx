@@ -8,7 +8,23 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
-import { Bell, Droplet, MapPin, Clock, Settings, CircleAlert, ChevronRight, Plus, AlertTriangle, Check, X } from "lucide-react";
+import { 
+  Bell, 
+  TrendingUp, 
+  TrendingDown, 
+  Clock, 
+  Settings, 
+  AlertTriangle,
+  ChevronRight, 
+  Plus, 
+  Check, 
+  X, 
+  Info,
+  DollarSign,
+  BarChart,
+  Target,
+  Percent
+} from "lucide-react";
 
 export default function AlertsPage() {
   const [activeTab, setActiveTab] = useState("all");
@@ -16,42 +32,42 @@ export default function AlertsPage() {
     { 
       id: 1, 
       type: "urgent", 
-      title: "Urgent Need: O Negative Blood", 
-      message: "City General Hospital has an urgent need for O- blood type donors. Can you help?", 
+      title: "Price Alert: NVDA Exceeded $850", 
+      message: "NVIDIA stock has exceeded your target price of $850. Consider reviewing your position.", 
       time: "10 minutes ago", 
       read: false 
     },
     { 
       id: 2, 
       type: "request", 
-      title: "New Donation Request", 
-      message: "County Medical Center has requested blood type A+ for scheduled surgeries.", 
+      title: "Volatility Alert: TSLA", 
+      message: "Tesla has shown unusual volatility with a 5% intraday swing. Monitor the position closely.", 
       time: "2 hours ago", 
       read: false 
     },
     { 
       id: 3, 
       type: "info", 
-      title: "Donation Drive This Weekend", 
-      message: "Join us for a community blood donation drive at Central Plaza on Saturday.", 
+      title: "Portfolio Rebalance Reminder", 
+      message: "Your quarterly portfolio rebalance is due. Technology sector is currently 8% overweight.", 
       time: "Yesterday", 
       read: true 
     },
     { 
       id: 4, 
       type: "success", 
-      title: "Thank You for Your Donation", 
-      message: "Your recent donation helped save three lives. Thank you for your generosity!", 
+      title: "Buy Order Executed: AAPL", 
+      message: "Your limit order to buy 15 shares of Apple at $190.45 has been successfully executed.", 
       time: "3 days ago", 
       read: true 
     },
   ]);
 
   const alertSettings = [
-    { id: "urgent_alerts", label: "Urgent Blood Requests", description: "Notifications for critical blood needs", enabled: true },
-    { id: "donation_requests", label: "New Donation Requests", description: "Alerts when hospitals request blood", enabled: true },
-    { id: "nearby_drives", label: "Nearby Donation Drives", description: "Information about donation opportunities", enabled: true },
-    { id: "thank_you", label: "Thank You Messages", description: "Updates on how your donations helped", enabled: true },
+    { id: "price_alerts", label: "Price Alerts", description: "Notifications when stocks hit target prices", enabled: true },
+    { id: "volatility_alerts", label: "Volatility Alerts", description: "Alerts for unusual market movements", enabled: true },
+    { id: "earnings_alerts", label: "Earnings Announcements", description: "Notifications for upcoming earnings releases", enabled: true },
+    { id: "portfolio_alerts", label: "Portfolio Threshold Alerts", description: "Alerts when portfolio metrics cross thresholds", enabled: true },
     { id: "push_notifications", label: "Push Notifications", description: "Receive alerts on your device", enabled: false },
     { id: "email_alerts", label: "Email Notifications", description: "Get alerts delivered to your inbox", enabled: true },
     { id: "sms_alerts", label: "SMS Notifications", description: "Receive text message alerts", enabled: false },
@@ -89,11 +105,11 @@ export default function AlertsPage() {
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case "urgent":
-        return <CircleAlert className="h-5 w-5 text-red-600" />;
+        return <AlertTriangle className="h-5 w-5 text-red-600" />;
       case "request":
-        return <Droplet className="h-5 w-5 text-blue-600" />;
+        return <TrendingUp className="h-5 w-5 text-blue-600" />;
       case "info":
-        return <Bell className="h-5 w-5 text-indigo-600" />;
+        return <Info className="h-5 w-5 text-indigo-600" />;
       case "success":
         return <Check className="h-5 w-5 text-green-600" />;
       default:
@@ -105,9 +121,9 @@ export default function AlertsPage() {
     <DashboardLayout title="Alerts">
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">Alerts & Notifications</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Market & Portfolio Alerts</h1>
           <p className="text-gray-600 mt-2">
-            Stay informed about urgent blood needs, donation requests, and other important updates.
+            Stay informed about price movements, market events, and important changes to your investments.
           </p>
         </div>
 
@@ -132,10 +148,10 @@ export default function AlertsPage() {
                       All
                     </TabsTrigger>
                     <TabsTrigger value="urgent" className="rounded-md px-4 py-2 data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-700 hover:text-red-600">
-                      Urgent
+                      Price
                     </TabsTrigger>
                     <TabsTrigger value="request" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">
-                      Requests
+                      Volatility
                     </TabsTrigger>
                     <TabsTrigger value="unread" className="rounded-md px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-gray-700 hover:text-blue-600">
                       Unread
@@ -191,12 +207,12 @@ export default function AlertsPage() {
                               <span className="text-xs text-gray-500">{notification.time}</span>
                               {notification.type === 'urgent' && (
                                 <Button size="sm" className="h-8 bg-red-600 hover:bg-red-700">
-                                  Respond Now
+                                  View Details
                                 </Button>
                               )}
                               {notification.type === 'request' && (
                                 <Button size="sm" variant="outline" className="h-8 text-blue-600 border-blue-200">
-                                  View Request
+                                  Check Stock
                                 </Button>
                               )}
                             </div>
@@ -256,38 +272,116 @@ export default function AlertsPage() {
 
             <Card className="mt-6">
               <CardHeader>
-                <CardTitle>Priority Alerts</CardTitle>
+                <CardTitle>Create New Alert</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
-                <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-6">
-                  <div className="flex items-start gap-3">
-                    <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5" />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Alert Type</label>
+                    <select className="w-full h-10 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                      <option value="price">Price Alert</option>
+                      <option value="volume">Volume Alert</option>
+                      <option value="change">% Change Alert</option>
+                      <option value="portfolio">Portfolio Alert</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Stock Symbol</label>
+                    <Input placeholder="AAPL, MSFT, etc." className="h-10 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500" />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <h4 className="font-medium text-gray-800">Urgent Blood Needs</h4>
-                      <p className="mt-1 text-sm text-gray-600">
-                        You will always receive urgent blood type alerts that match your blood type (O-) regardless of your notification settings.
-                      </p>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Condition</label>
+                      <select className="w-full h-10 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                        <option value="change">% Change</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
+                      <div className="relative">
+                        <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                        <Input placeholder="0.00" className="h-10 pl-8 rounded-lg border-gray-200 focus:border-blue-500 focus:ring-blue-500" />
+                      </div>
                     </div>
                   </div>
                 </div>
+                
+                <Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Alert
+                </Button>
+              </CardContent>
+            </Card>
 
-                <div className="space-y-4">
-                  <h4 className="font-medium text-gray-800">Your Priority Types</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {["O-", "O+", "AB-", "AB+"].map((bloodType, i) => (
-                      <div 
-                        key={i} 
-                        className={`border rounded-lg p-3 text-center ${
-                          i === 0 ? "border-red-200 bg-red-50 text-red-700" : "border-gray-200"
-                        }`}
-                      >
-                        <span className="font-medium">{bloodType}</span>
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle>Popular Alert Templates</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  <motion.div
+                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                    className="p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                        <DollarSign className="h-4 w-4" />
                       </div>
-                    ))}
-                  </div>
-                  <Button variant="outline" className="w-full mt-2">
-                    Manage Blood Types
-                  </Button>
+                      <div>
+                        <h4 className="font-medium text-gray-800 text-sm">Price Movement Alert</h4>
+                        <p className="text-xs text-gray-500 mt-0.5">Notifies you when a stock moves significantly</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                    className="p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+                        <BarChart className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-800 text-sm">Volume Spike Alert</h4>
+                        <p className="text-xs text-gray-500 mt-0.5">Alerts when trading volume exceeds normal levels</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                    className="p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                        <Target className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-800 text-sm">Target Price Alert</h4>
+                        <p className="text-xs text-gray-500 mt-0.5">Notifies when a stock reaches your target price</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                    className="p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                        <Percent className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-800 text-sm">Portfolio Threshold Alert</h4>
+                        <p className="text-xs text-gray-500 mt-0.5">Monitors when portfolio values cross key thresholds</p>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
               </CardContent>
             </Card>
