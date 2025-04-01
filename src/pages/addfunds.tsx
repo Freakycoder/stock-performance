@@ -40,7 +40,7 @@ export default function AddFundsPage() {
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-800">Add Funds</h1>
           <p className="text-gray-600 mt-2">
-            Add funds to your account to support blood donation initiatives and emergency response programs.
+            Add funds to your investment account to expand your portfolio and seize market opportunities.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export default function AddFundsPage() {
           <div className="md:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Make a Contribution</CardTitle>
+                <CardTitle>Add Funds to Your Account</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <form onSubmit={handleSubmit}>
@@ -57,7 +57,7 @@ export default function AddFundsPage() {
                     {/* Amount selection */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Contribution Amount
+                        Deposit Amount
                       </label>
                       <div className="grid grid-cols-3 gap-2 mb-4">
                         {predefinedAmounts.map((preAmount) => (
@@ -198,10 +198,10 @@ export default function AddFundsPage() {
                         ) : isComplete ? (
                           <span className="flex items-center">
                             <Check className="mr-2 h-5 w-5" />
-                            Contribution Complete!
+                            Deposit Complete!
                           </span>
                         ) : (
-                          `Contribute $${amount || "0"}`
+                          `Deposit $${amount || "0"}`
                         )}
                       </Button>
                     </div>
@@ -216,20 +216,20 @@ export default function AddFundsPage() {
             <div className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Why Contribute?</CardTitle>
+                  <CardTitle>Why Invest?</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="space-y-4">
                     <p className="text-gray-700">
-                      Your contributions help fund blood donation drives, emergency response programs, and critical medical supplies.
+                      Your deposits enable portfolio diversification, reduce average costs through dollar-cost averaging, and help seize market opportunities.
                     </p>
                     <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
                       <div className="flex items-start gap-3">
                         <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
                         <div>
-                          <h4 className="font-medium text-gray-800">Impact of Your Donation</h4>
+                          <h4 className="font-medium text-gray-800">Benefits of Regular Investing</h4>
                           <p className="mt-1 text-sm text-gray-600">
-                            Every $50 helps provide essential supplies for collecting one unit of blood that can save up to three lives.
+                            Every $100 invested monthly could potentially grow to over $15,000 in 10 years with average market returns.
                           </p>
                         </div>
                       </div>
@@ -240,7 +240,7 @@ export default function AddFundsPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Recent Contributions</CardTitle>
+                  <CardTitle>Recent Deposits</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="space-y-4">
@@ -264,7 +264,7 @@ export default function AddFundsPage() {
                 </CardContent>
                 <CardFooter>
                   <Button variant="link" className="text-blue-600 flex items-center">
-                    <span>View all contributions</span>
+                    <span>View all deposits</span>
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </Button>
                 </CardFooter>
