@@ -144,6 +144,7 @@ export function PortfolioAllocation() {
                         stroke={entry.name === selectedSector ? '#1e40af' : '#fff'}
                         strokeWidth={entry.name === selectedSector ? 2 : 1}
                       />
+                      
                     ))}
                   </Pie>
                   <Tooltip content={<CustomTooltip />} />
