@@ -391,7 +391,7 @@ export default function PortfolioPage() {
                           <h3 className="font-medium text-gray-800 text-lg">Concentration Risk</h3>
                         </div>
                         <div>
-                          <p className="mt-1 text-gray-600">Your technology sector allocation is 35%, which represents high concentration risk.</p>
+                          <p className="mt-1 text-gray-600">Your technology sector allocation is 60%, which represents high concentration risk.</p>
                         </div>
                       </div>
                     </div>
